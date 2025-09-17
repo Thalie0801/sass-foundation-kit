@@ -12,6 +12,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "framer-motion": fileURLToPath(
+        new URL("./src/compat/framer-motion.tsx", import.meta.url),
+      ),
     },
   },
   test: {
