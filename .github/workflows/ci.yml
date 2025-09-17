@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate landing content
+        run: |
+          set -euo pipefail
+          SEARCH_PATHS=("src/pages/Index.tsx" "src/components/landing")
+
+          echo "Checking for section IDs"
+          grep -R --include='*.tsx' --line-number 'id="' "${SEARCH_PATHS[@]}"
+
+          echo "Checking for anchor hrefs"
+          grep -R --include='*.tsx' --line-number 'href="' "${SEARCH_PATHS[@]}"
+
+          echo "Checking for Starter CTA URL"
+          grep -R --include='*.tsx' --line-number 'https://supabase.com/dashboard/sign-up' "${SEARCH_PATHS[@]}"
+
+          echo "Checking for VITE_STRIPE_BETA_LINK references"
+          grep -R --line-number 'VITE_STRIPE_BETA_LINK' --exclude-dir=node_modules --exclude-dir=.git .
+
+          echo "Ensuring no stray Blog references"
+          if grep -R --include='*.tsx' --line-number 'Blog' "${SEARCH_PATHS[@]}"; then
+            echo 'Unexpected "Blog" reference detected in landing content.' >&2
+            exit 1
+          fi
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Build
+        env:
+          VITE_SUPABASE_PROJECT_ID: ajrswsxnlkgauhkiedfc
+          VITE_SUPABASE_URL: https://ajrswsxnlkgauhkiedfc.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFqcnN3c3hubGtnYXVoa2llZGZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE4OTg4NjUsImV4cCI6MjA2NzQ3NDg2NX0.0gUHAsEOEVxZwjOizqQ6bbcSIBxsEGwDNIDJ5xWVXpA
+          VITE_STRIPE_BETA_LINK: https://dashboard.stripe.com/test/pay/your_beta_link
+        run: pnpm build
+
+      - name: Test
+        run: pnpm test -- --run
