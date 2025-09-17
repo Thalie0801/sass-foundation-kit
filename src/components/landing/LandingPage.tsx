@@ -1,55 +1,127 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useCallback } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { useToast } from "@/hooks/use-toast";
 
 const LandingPage = () => {
+  const { toast } = useToast();
+  const betaLink = "/auth?mode=signup&plan=Beta";
+
+  const handleBetaClick = useCallback(async () => {
+    const hasWindow = typeof window !== "undefined";
+    const url = hasWindow ? new URL(betaLink, window.location.origin).toString() : betaLink;
+    const canUseClipboard = typeof navigator !== "undefined" && navigator.clipboard?.writeText;
+
+    try {
+      if (canUseClipboard) {
+        await navigator.clipboard.writeText(url);
+      }
+
+      if (hasWindow) {
+        window.open(betaLink, "_blank", "noopener,noreferrer");
+      }
+
+      toast({
+        title: "Lien Beta copié ✨",
+        description: "L'inscription s'ouvre dans un nouvel onglet."
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Copie impossible",
+        description: "Redirection directe vers le programme Beta."
+      });
+
+      if (hasWindow) {
+        window.location.href = betaLink;
+      }
+    }
+  }, [betaLink, toast]);
+
   const features = [
     {
       icon: Calendar,
-      title: "Calendrier Éditorial",
-      description: "Planifiez et organisez votre contenu avec notre calendrier intelligent"
+      title: "Vision 360° des campagnes",
+      description: "Visualisez chaque publication, canal et jalon stratégique en un seul planning interactif."
     },
     {
       icon: Users,
-      title: "Multi-Tenant",
-      description: "Gérez plusieurs marques depuis une seule plateforme"
+      title: "Collaboration orchestrée",
+      description: "Invitez vos experts, assignez les validations et gardez l'historique de toutes les itérations."
     },
     {
       icon: BarChart3,
-      title: "Analytics & KPI",
-      description: "Suivez vos performances avec des métriques détaillées"
+      title: "Scores prédictifs IA",
+      description: "Anticipez les performances grâce à nos modèles entraînés sur plus de 2M de contenus."
     },
     {
       icon: Zap,
-      title: "Automatisation",
-      description: "Intégrations n8n et Postiz pour automatiser vos workflows"
+      title: "Automations plug-and-play",
+      description: "Déclenchez n8n, Postiz ou vos webhooks maison sans quitter votre espace de travail."
     }
   ];
 
   const plans = [
     {
-      name: "Starter",
-      price: "29€",
+      name: "Solo",
+      price: "19,90 €",
       period: "/mois",
-      description: "Pour les petites équipes qui débutent",
-      features: ["1 marque", "10 publications/mois", "Support email", "Calendrier basique"]
+      description: "L'essentiel pour piloter une première marque sans friction.",
+      features: [
+        "1 marque & 2 collaborateurs",
+        "Calendrier éditorial IA 30 jours",
+        "Exports PDF illimités",
+        "Support email 48h"
+      ],
+      badge: {
+        label: "Promo",
+        className: "bg-emerald-500/10 text-emerald-300 border-emerald-500/30"
+      }
     },
     {
-      name: "Pro",
-      price: "79€",
+      name: "Équipe",
+      price: "49,90 €",
       period: "/mois",
-      description: "Pour les équipes qui grandissent",
-      features: ["5 marques", "100 publications/mois", "Support prioritaire", "Analytics avancées", "Intégrations"],
-      popular: true
+      description: "Pensé pour les agences et scale-ups en pleine croissance.",
+      features: [
+        "5 marques & 10 collaborateurs",
+        "Workflows de validation multi-niveaux",
+        "Bibliothèque d'assets partagée",
+        "Support chat prioritaire"
+      ]
+    },
+    {
+      name: "Scale",
+      price: "89,90 €",
+      period: "/mois",
+      description: "Automatisez vos opérations et pilotez vos KPI en continu.",
+      features: [
+        "Marques illimitées",
+        "Automations n8n & Postiz",
+        "Rapports KPI personnalisés",
+        "SLA dédié & onboarding"
+      ],
+      highlight: true
     },
     {
       name: "Beta",
-      price: "149€",
-      period: "/mois",
-      description: "Pour les grandes organisations",
-      features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
+      price: "49,90 €",
+      period: "×3",
+      description: "Accès anticipé aux nouveautés Aeditus avec accompagnement expert sur 3 mois.",
+      features: [
+        "Modules Scale inclus",
+        "Coaching onboarding 1:1",
+        "Canal Slack privé avec l'équipe produit",
+        "50 places réservées au programme Beta"
+      ],
+      badge: {
+        label: "Beta (50)",
+        className: "bg-primary/10 text-primary border-primary/20"
+      }
     }
   ];
 
@@ -102,7 +174,10 @@ const LandingPage = () => {
               Essai Gratuit 14 jours
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button variant="hero" size="xl" className="text-lg">
+            <Button onClick={handleBetaClick} variant="hero" size="xl" className="text-lg">
+              Rejoindre la Beta
+            </Button>
+            <Button variant="ghost" size="xl" className="text-lg text-foreground/80">
               Voir la Démo
             </Button>
           </div>
@@ -110,7 +185,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="fonctionnalites" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-foreground">
@@ -139,7 +214,7 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="tarifs" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-foreground">
@@ -149,17 +224,19 @@ const LandingPage = () => {
               Choisissez le plan qui correspond à vos ambitions
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {plans.map((plan, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className={`relative bg-card/50 backdrop-blur-sm border-border/20 transition-smooth hover:shadow-elegant ${
-                  plan.popular ? 'border-primary shadow-gold' : ''
+                  plan.highlight ? "border-primary shadow-gold" : ""
                 }`}
               >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-gold text-primary-foreground">
-                    Populaire
+                {plan.badge && (
+                  <Badge
+                    className={`absolute -top-3 left-1/2 transform -translate-x-1/2 border ${plan.badge.className}`}
+                  >
+                    {plan.badge.label}
                   </Badge>
                 )}
                 <CardContent className="p-8">
@@ -185,12 +262,15 @@ const LandingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
+                  <Button
+                    asChild
+                    variant={plan.highlight ? "premium" : "hero"}
                     className="w-full"
                     size="lg"
                   >
-                    Choisir {plan.name}
+                    <Link to={`/auth?mode=signup&plan=${encodeURIComponent(plan.name)}`}>
+                      Choisir {plan.name}
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>
@@ -212,11 +292,11 @@ const LandingPage = () => {
                 </span>
               </h2>
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Rejoignez des milliers d'entreprises qui font confiance à Aeditus 
+                Rejoignez des milliers d'entreprises qui font confiance à Aeditus
                 pour gérer leur présence digitale.
               </p>
-              <Button variant="premium" size="xl" className="text-lg">
-                Commencer Maintenant
+              <Button onClick={handleBetaClick} variant="premium" size="xl" className="text-lg">
+                Rejoindre la Beta
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </CardContent>
