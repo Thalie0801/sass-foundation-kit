@@ -5,64 +5,63 @@
 /* Æditus Premium Design System */
 @layer base {
   :root {
-    /* Brand Foundations */
-    --background: 48 56% 97%;
-    --foreground: 160 6% 10%;
+    /* Base crème + texte vert foncé */
+    --background: 42 60% 96%;
+    --foreground: 165 28% 12%;
 
-    --card: 48 56% 98%;
-    --card-foreground: 160 6% 12%;
+    /* Carte / panneau */
+    --card: 42 60% 98%;
+    --card-foreground: 165 28% 12%;
+    --muted: 42 24% 92%;
+    --muted-foreground: 165 12% 35%;
+    --border: 165 20% 85%;
+    --input: 165 20% 85%;
 
     --popover: 48 56% 99%;
     --popover-foreground: 160 6% 12%;
 
-    /* Emerald Primary */
-    --primary: 158 64% 30%;
-    --primary-foreground: 46 29% 97%;
+    /* Primaire = émeraude, Secondaire = or */
+    --primary: 160 84% 35%;
+    --primary-foreground: 160 100% 96%;
     --primary-glow: 158 64% 42%;
 
-    /* Golden Accents */
-    --secondary: 46 90% 58%;
-    --secondary-foreground: 160 6% 12%;
+    --secondary: 45 45% 50%;
+    --secondary-foreground: 45 100% 97%;
 
-    --accent: 46 90% 60%;
-    --accent-foreground: 160 6% 14%;
+    --accent: 45 45% 50%;
+    --accent-foreground: 45 100% 97%;
 
-    /* Supportive Surfaces */
-    --muted: 160 20% 96%;
-    --muted-foreground: 160 4% 35%;
-
+    /* Supportive */
     --destructive: 0 72% 55%;
     --destructive-foreground: 46 29% 97%;
 
-    --border: 160 10% 85%;
-    --input: 160 10% 85%;
-    --ring: 158 64% 30%;
+    --ring: var(--primary);
 
     --radius: 0.75rem;
 
     /* Premium Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(46 90% 58%), hsl(46 85% 68%));
+    --gradient-gold: linear-gradient(135deg, hsl(45 45% 50%), hsl(45 55% 65%));
     --gradient-dark: linear-gradient(180deg, hsl(160 20% 10%), hsl(160 22% 6%));
-    --gradient-premium: linear-gradient(135deg, hsl(158 64% 30%), hsl(46 90% 58%));
-    --gradient-subtle: linear-gradient(180deg, hsl(48 56% 99%), hsl(48 56% 95%));
+    --gradient-premium: linear-gradient(135deg, hsl(160 84% 35%), hsl(45 45% 50%));
+    --gradient-subtle: linear-gradient(180deg, hsl(42 60% 99%), hsl(42 60% 95%));
 
     /* Luxurious Shadows */
-    --shadow-gold: 0 16px 40px -12px hsl(46 90% 58% / 0.35);
-    --shadow-premium: 0 24px 60px -18px hsl(158 64% 30% / 0.32);
-    --shadow-elegant: 0 16px 45px -24px hsl(160 20% 20% / 0.4);
+    --shadow-gold: 0 16px 40px -12px hsl(45 45% 50% / 0.35);
+    --shadow-premium: 0 24px 60px -18px hsl(160 84% 35% / 0.32);
+    --shadow-elegant: 0 16px 45px -24px hsl(165 28% 20% / 0.4);
 
     /* Animated Ease */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    /* Sidebar Styling */
-    --sidebar-background: 158 42% 18%;
-    --sidebar-foreground: 46 29% 96%;
-    --sidebar-primary: 46 90% 58%;
-    --sidebar-primary-foreground: 160 6% 12%;
+    /* Sidebar si utilisée */
+    --sidebar-background: 42 60% 97%;
+    --sidebar-foreground: 165 28% 12%;
+    --sidebar-primary: var(--primary);
+    --sidebar-primary-foreground: var(--primary-foreground);
     --sidebar-accent: 158 40% 24%;
     --sidebar-accent-foreground: 46 29% 96%;
-    --sidebar-border: 158 34% 30%;
+    --sidebar-border: 165 20% 85%;
     --sidebar-ring: 46 90% 58%;
   }
 
@@ -105,6 +104,14 @@
     --sidebar-border: 160 22% 18%;
     --sidebar-ring: 158 64% 40%;
   }
+}
+
+.bg-hero-aeditus {
+  background-image: linear-gradient(
+    135deg,
+    hsl(160 84% 35% / 0.1),
+    hsl(45 45% 50% / 0.1)
+  );
 }
 
 /* Luxury micro-interactions */
