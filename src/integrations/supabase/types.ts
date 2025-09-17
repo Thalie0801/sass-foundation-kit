@@ -14,6 +14,59 @@ export type Database = {
   }
   public: {
     Tables: {
+      brands: {
+        Row: {
+          brand_voice: string | null
+          created_at: string
+          description: string | null
+          id: string
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          target_audience: string | null
+          tenant_id: string
+          tone: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_voice?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          target_audience?: string | null
+          tenant_id: string
+          tone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_voice?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          target_audience?: string | null
+          tenant_id?: string
+          tone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brands_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contents: {
         Row: {
           content: string
@@ -49,6 +102,78 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      events: {
+        Row: {
+          assigned_to: string | null
+          brand_id: string | null
+          content: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          event_type: string
+          id: string
+          platform: string | null
+          priority: number | null
+          scheduled_date: string | null
+          status: string
+          tags: string[] | null
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          brand_id?: string | null
+          content?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          event_type?: string
+          id?: string
+          platform?: string | null
+          priority?: number | null
+          scheduled_date?: string | null
+          status?: string
+          tags?: string[] | null
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          brand_id?: string | null
+          content?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          event_type?: string
+          id?: string
+          platform?: string | null
+          priority?: number | null
+          scheduled_date?: string | null
+          status?: string
+          tags?: string[] | null
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       gamification: {
         Row: {
@@ -91,6 +216,44 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      memberships: {
+        Row: {
+          created_at: string
+          id: string
+          role: string
+          status: string
+          tenant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: string
+          status?: string
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: string
+          status?: string
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -167,6 +330,54 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      tenants: {
+        Row: {
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          primary_color: string | null
+          secondary_color: string | null
+          slug: string
+          stripe_customer_id: string | null
+          subscription_plan: string | null
+          subscription_status: string | null
+          tone: string | null
+          trial_ends_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          slug: string
+          stripe_customer_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          tone?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          primary_color?: string | null
+          secondary_color?: string | null
+          slug?: string
+          stripe_customer_id?: string | null
+          subscription_plan?: string | null
+          subscription_status?: string | null
+          tone?: string | null
+          trial_ends_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
