@@ -1,3 +1,4 @@
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -199,28 +200,56 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <Card className="bg-gradient-subtle border-border/20 shadow-premium">
-            <CardContent className="p-12">
-              <h2 className="text-4xl font-bold mb-6 text-foreground">
-                Prêt à Révolutionner
-                <br />
-                <span className="bg-gradient-gold bg-clip-text text-transparent">
-                  Votre Stratégie Contenu ?
-                </span>
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Rejoignez des milliers d'entreprises qui font confiance à Aeditus 
-                pour gérer leur présence digitale.
-              </p>
-              <Button variant="premium" size="xl" className="text-lg">
-                Commencer Maintenant
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </CardContent>
-          </Card>
+      {/* FAQ */}
+      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-background/60">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 text-foreground">
+              Questions fréquentes
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Tout ce que vous devez savoir avant de commencer avec Aeditus
+            </p>
+          </div>
+          <Accordion type="single" collapsible className="space-y-4">
+            <AccordionItem value="faq-1">
+              <AccordionTrigger className="text-left text-lg">
+                Quelle est la durée de l'essai gratuit ?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Vous bénéficiez de 14 jours complets pour explorer toutes les fonctionnalités
+                de la plateforme sans obligation. Vous pouvez annuler à tout moment depuis votre
+                espace compte.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-2">
+              <AccordionTrigger className="text-left text-lg">
+                Puis-je inviter mon équipe sur Aeditus ?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Bien sûr ! Les plans Pro et Beta permettent d'inviter un nombre illimité de
+                collaborateurs, avec des permissions personnalisées pour vos différentes marques.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-3">
+              <AccordionTrigger className="text-left text-lg">
+                Comment fonctionnent les intégrations n8n et Postiz ?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Connectez vos outils préférés en quelques clics grâce à nos connecteurs prêts à l'emploi.
+                Nos workflows automatisés synchronisent vos contenus, statistiques et campagnes en temps réel.
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="faq-4">
+              <AccordionTrigger className="text-left text-lg">
+                Offrez-vous un accompagnement personnalisé ?
+              </AccordionTrigger>
+              <AccordionContent className="text-muted-foreground">
+                Notre équipe Customer Success vous accompagne dès l'onboarding et reste disponible par
+                chat ou visioconférence. Les clients Beta bénéficient d'un plan de déploiement dédié.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
       </section>
 
