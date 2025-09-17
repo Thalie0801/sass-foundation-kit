@@ -80,6 +80,18 @@ For Stripe, ensure you create the Payment Link in **test mode** while working lo
 
 Simply open [Lovable](https://lovable.dev/projects/bb4c8e0f-7e4f-4a6a-84c7-f8bd0db941e0) and click on Share -> Publish.
 
+## Déploiement Vercel
+
+1. **Associer le dépôt Git.** Depuis le tableau de bord Vercel, cliquez sur **Add New… → Project**, importez ce dépôt GitHub et laissez Vercel détecter automatiquement le framework Vite.
+2. **Configurer les variables d’environnement.** Dans **Settings → Environment Variables**, créez les entrées nécessaires pour chaque environnement :
+   - Variables publiques côté client : `VITE_SUPABASE_PROJECT_ID`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_URL`, `VITE_STRIPE_BETA_LINK` (et toute autre variable `VITE_*` éventuellement ajoutée par la suite).
+   - Secrets Stripe pour les fonctions serverless : `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET` (valeur générée après la configuration du webhook).
+   - Secrets Supabase pour l’API : `SUPABASE_SERVICE_ROLE_KEY` ou toute clé requise par vos fonctions `/api/*.ts`.
+   N’oubliez pas de répliquer ces valeurs pour les environnements **Preview** et **Production** si nécessaire.
+3. **Configurer le webhook Stripe.** Dans le Dashboard Stripe, créez un endpoint vers `https://<votre-projet>.vercel.app/api/stripe-webhook`, sélectionnez les événements requis (ex. `checkout.session.completed`), puis copiez le secret généré pour l’ajouter dans `STRIPE_WEBHOOK_SECRET` sur Vercel.
+4. **Ajouter le domaine dans Supabase Auth.** Dans **Supabase → Authentication → URL Configuration**, ajoutez les URLs Vercel (preview et production) aux listes **Site URL** et **Redirect URLs** pour autoriser les flux OAuth et reset password.
+5. **Vérifier la configuration du build.** Dans **Settings → Build & Output**, renseignez `pnpm build` comme commande de build, `dist` comme dossier de sortie statique et gardez les fonctions dans `api/*.ts` pour qu’elles soient déployées comme Serverless Functions.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
