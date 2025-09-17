@@ -51,4 +51,13 @@ describe('LandingPage', () => {
     fireEvent.click(proButton);
     expect(openSpy).toHaveBeenCalledWith('https://example.com/pro', '_blank', 'noopener,noreferrer');
   });
+
+  it('désactive les boutons lorsque le lien contient uniquement des espaces', async () => {
+    vi.stubEnv('VITE_LINK_PRO', '   ');
+
+    await renderLanding();
+
+    const proButton = screen.getByRole('button', { name: /Choisir Pro/i });
+    expect(proButton).toBeDisabled();
+  });
 });

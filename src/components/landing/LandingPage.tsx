@@ -5,18 +5,24 @@ import { ArrowRight, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
 
-const linkEssential = import.meta.env.VITE_LINK_ESSENTIAL as string | undefined;
-const linkStarter = import.meta.env.VITE_LINK_STARTER as string | undefined;
-const linkPro = import.meta.env.VITE_LINK_PRO as string | undefined;
-const linkFynk = import.meta.env.VITE_LINK_FYNK as string | undefined;
-const linkFynkPro = import.meta.env.VITE_LINK_FYNK_PRO as string | undefined;
+const normalizeLink = (value?: string) => {
+  const trimmed = value?.trim();
+  return trimmed ? trimmed : undefined;
+};
+
+const linkEssential = normalizeLink(import.meta.env.VITE_LINK_ESSENTIAL as string | undefined);
+const linkStarter = normalizeLink(import.meta.env.VITE_LINK_STARTER as string | undefined);
+const linkPro = normalizeLink(import.meta.env.VITE_LINK_PRO as string | undefined);
+const linkFynk = normalizeLink(import.meta.env.VITE_LINK_FYNK as string | undefined);
+const linkFynkPro = normalizeLink(import.meta.env.VITE_LINK_FYNK_PRO as string | undefined);
 
 function openLink(url?: string) {
-  if (!url) {
+  const normalizedUrl = normalizeLink(url);
+  if (!normalizedUrl) {
     alert("Lien paiement non configuré");
     return;
   }
-  window.open(url, "_blank", "noopener,noreferrer");
+  window.open(normalizedUrl, "_blank", "noopener,noreferrer");
 }
 
 const features = [
