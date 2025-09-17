@@ -23,7 +23,9 @@
 
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "framer-motion": ["./src/compat/framer-motion"],
+      "framer-motion/*": ["./src/compat/framer-motion"]
     }
   },
   "include": ["src"]
