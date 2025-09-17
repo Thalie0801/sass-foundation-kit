@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
 
 const LandingPage = () => {
@@ -55,8 +56,8 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-dark">
-      {/* Header */}
-      <header className="border-b border-border/20 backdrop-blur-sm bg-background/10">
+      {/* Navigation */}
+      <nav className="border-b border-border/20 backdrop-blur-sm bg-background/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
@@ -65,17 +66,30 @@ const LandingPage = () => {
                 Aeditus
               </span>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-foreground">
-                Connexion
-              </Button>
-              <Button variant="premium" size="lg">
-                Commencer
-              </Button>
+            <div className="flex items-center space-x-8">
+              <div className="hidden md:flex items-center space-x-6 text-sm font-medium text-muted-foreground">
+                <a href="#fonctionnalites" className="hover:text-foreground transition-colors">
+                  Fonctionnalités
+                </a>
+                <a href="#tarifs" className="hover:text-foreground transition-colors">
+                  Tarifs
+                </a>
+                <a href="#faq" className="hover:text-foreground transition-colors">
+                  FAQ
+                </a>
+              </div>
+              <div className="flex items-center space-x-4">
+                <Button variant="ghost" className="text-foreground" asChild>
+                  <Link to="/auth">Connexion</Link>
+                </Button>
+                <Button variant="premium" size="lg" asChild>
+                  <Link to="/auth?mode=signup&plan=Starter">Commencer</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
@@ -110,7 +124,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="fonctionnalites" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-foreground">
@@ -139,7 +153,7 @@ const LandingPage = () => {
       </section>
 
       {/* Pricing */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      <section id="tarifs" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4 text-foreground">
@@ -195,6 +209,50 @@ const LandingPage = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-background/40">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4 text-foreground">FAQ</h2>
+            <p className="text-xl text-muted-foreground">
+              Les réponses aux questions les plus fréquentes sur Aeditus
+            </p>
+          </div>
+          <div className="space-y-6">
+            <Card className="bg-card/60 backdrop-blur-sm border-border/20">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Puis-je essayer Aeditus avant de m'engager ?
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Oui, profitez de 14 jours d'essai gratuit pour découvrir toutes les fonctionnalités de la plateforme sans carte de crédit.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-card/60 backdrop-blur-sm border-border/20">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Puis-je changer de plan à tout moment ?
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Bien sûr, vous pouvez passer à un plan supérieur ou inférieur à tout moment depuis votre tableau de bord sans interruption de service.
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="bg-card/60 backdrop-blur-sm border-border/20">
+              <CardContent className="p-6">
+                <h3 className="text-lg font-semibold text-foreground mb-2">
+                  Offrez-vous un accompagnement personnalisé ?
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Notre équipe Customer Success est disponible pour vous aider à configurer Aeditus et partager les meilleures pratiques adaptées à vos objectifs.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
