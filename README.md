@@ -70,6 +70,7 @@ Environment variables are loaded from the `.env` file at the root of the project
 | `VITE_SUPABASE_PUBLISHABLE_KEY` | Public API key required for client-side Supabase calls. | In the Supabase dashboard, go to **Project Settings → API** and copy the "anon public" key. |
 | `VITE_SUPABASE_URL` | Base URL for the Supabase REST and realtime services. | Available in **Project Settings → API** within the Supabase dashboard. |
 | `VITE_STRIPE_BETA_LINK` | Shareable Stripe Payment Link that allows users to purchase or join the beta offering promoted in the app. | In the Stripe Dashboard, create or open the Payment Link associated with your beta product (test mode for development), then copy the link URL from the "Share" panel. |
+|  | • Sans `VITE_STRIPE_BETA_LINK`, le CTA bêta est désactivé et affiche le toast « Lien Beta non configuré ». |  |
 
 For Stripe, ensure you create the Payment Link in **test mode** while working locally. Once you're ready for production, switch the URL to the live link so users can complete the purchase flow.
 
