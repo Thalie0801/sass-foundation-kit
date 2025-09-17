@@ -3,8 +3,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { getBetaLink } from "@/lib/env";
 
 const LandingPage = () => {
+  const betaLink = getBetaLink();
+  const hasBetaLink = Boolean(betaLink);
+
   const features = [
     {
       icon: Calendar,
@@ -150,51 +154,66 @@ const LandingPage = () => {
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative bg-card/50 backdrop-blur-sm border-border/20 transition-smooth hover:shadow-elegant ${
-                  plan.popular ? 'border-primary shadow-gold' : ''
-                }`}
-              >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-gold text-primary-foreground">
-                    Populaire
-                  </Badge>
-                )}
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-2 text-foreground">
-                    {plan.name}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    {plan.description}
-                  </p>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-                      {plan.price}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {plan.period}
-                    </span>
-                  </div>
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-sm">
-                        <Sparkles className="h-4 w-4 text-primary mr-3" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
-                    className="w-full"
-                    size="lg"
-                  >
-                    Choisir {plan.name}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+            {plans.map((plan, index) => {
+              const isBetaPlan = plan.name === "Beta";
+
+              const handlePlanClick = () => {
+                if (isBetaPlan) {
+                  if (betaLink) {
+                    window.open(betaLink, "_blank", "noopener,noreferrer");
+                  }
+                  return;
+                }
+              };
+
+              return (
+                <Card
+                  key={index}
+                  className={`relative bg-card/50 backdrop-blur-sm border-border/20 transition-smooth hover:shadow-elegant ${
+                    plan.popular ? 'border-primary shadow-gold' : ''
+                  }`}
+                >
+                  {plan.popular && (
+                    <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-gold text-primary-foreground">
+                      Populaire
+                    </Badge>
+                  )}
+                  <CardContent className="p-8">
+                    <h3 className="text-2xl font-bold mb-2 text-foreground">
+                      {plan.name}
+                    </h3>
+                    <p className="text-muted-foreground mb-4">
+                      {plan.description}
+                    </p>
+                    <div className="mb-6">
+                      <span className="text-4xl font-bold bg-gradient-gold bg-clip-text text-transparent">
+                        {plan.price}
+                      </span>
+                      <span className="text-muted-foreground">
+                        {plan.period}
+                      </span>
+                    </div>
+                    <ul className="space-y-3 mb-8">
+                      {plan.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex items-center text-sm">
+                          <Sparkles className="h-4 w-4 text-primary mr-3" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <Button
+                      variant={plan.popular ? "premium" : "hero"}
+                      className="w-full"
+                      size="lg"
+                      onClick={handlePlanClick}
+                      disabled={isBetaPlan && !hasBetaLink}
+                    >
+                      Choisir {plan.name}
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
