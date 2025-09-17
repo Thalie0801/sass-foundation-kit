@@ -1,58 +1,88 @@
+import { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
 
 const LandingPage = () => {
-  const features = [
-    {
-      icon: Calendar,
-      title: "Calendrier Éditorial",
-      description: "Planifiez et organisez votre contenu avec notre calendrier intelligent"
-    },
-    {
-      icon: Users,
-      title: "Multi-Tenant",
-      description: "Gérez plusieurs marques depuis une seule plateforme"
-    },
-    {
-      icon: BarChart3,
-      title: "Analytics & KPI",
-      description: "Suivez vos performances avec des métriques détaillées"
-    },
-    {
-      icon: Zap,
-      title: "Automatisation",
-      description: "Intégrations n8n et Postiz pour automatiser vos workflows"
-    }
-  ];
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
-  const plans = [
-    {
-      name: "Starter",
-      price: "29€",
-      period: "/mois",
-      description: "Pour les petites équipes qui débutent",
-      features: ["1 marque", "10 publications/mois", "Support email", "Calendrier basique"]
-    },
-    {
-      name: "Pro",
-      price: "79€",
-      period: "/mois",
-      description: "Pour les équipes qui grandissent",
-      features: ["5 marques", "100 publications/mois", "Support prioritaire", "Analytics avancées", "Intégrations"],
-      popular: true
-    },
-    {
-      name: "Beta",
-      price: "149€",
-      period: "/mois",
-      description: "Pour les grandes organisations",
-      features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
+  const stripeBetaLink = useMemo(
+    () => import.meta.env.VITE_STRIPE_BETA_LINK?.trim() || undefined,
+    []
+  );
+
+  const features = useMemo(
+    () => [
+      {
+        icon: Calendar,
+        title: "Calendrier Éditorial",
+        description: "Planifiez et organisez votre contenu avec notre calendrier intelligent"
+      },
+      {
+        icon: Users,
+        title: "Multi-Tenant",
+        description: "Gérez plusieurs marques depuis une seule plateforme"
+      },
+      {
+        icon: BarChart3,
+        title: "Analytics & KPI",
+        description: "Suivez vos performances avec des métriques détaillées"
+      },
+      {
+        icon: Zap,
+        title: "Automatisation",
+        description: "Intégrations n8n et Postiz pour automatiser vos workflows"
+      }
+    ],
+    []
+  );
+
+  const plans = useMemo(
+    () => [
+      {
+        name: "Starter",
+        price: "29€",
+        period: "/mois",
+        description: "Pour les petites équipes qui débutent",
+        features: ["1 marque", "10 publications/mois", "Support email", "Calendrier basique"]
+      },
+      {
+        name: "Pro",
+        price: "79€",
+        period: "/mois",
+        description: "Pour les équipes qui grandissent",
+        features: ["5 marques", "100 publications/mois", "Support prioritaire", "Analytics avancées", "Intégrations"],
+        popular: true
+      },
+      {
+        name: "Beta",
+        price: "149€",
+        period: "/mois",
+        description: "Pour les grandes organisations",
+        features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
+      }
+    ],
+    []
+  );
+
+  const handleStarterTrialClick = () => {
+    navigate("/auth?mode=signup&plan=Starter");
+  };
+
+  const handleBetaClick = () => {
+    if (!stripeBetaLink) {
+      toast({ description: "Lien Beta non configuré" });
+      return;
     }
-  ];
+
+    window.open(stripeBetaLink, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-dark">
@@ -93,27 +123,32 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
             <Sparkles className="w-4 h-4 mr-2" />
-            Nouvelle génération de SaaS
+            Suite éditoriale intelligente
           </Badge>
           <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-gold bg-clip-text text-transparent leading-tight">
-            La Plateforme
+            Æditus — la plateforme
             <br />
-            Ultime pour vos
+            éditoriale des
             <br />
             <span className="bg-gradient-premium bg-clip-text text-transparent">
-              Contenus
+              marques ambitieuses
             </span>
           </h1>
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Gérez vos marques, planifiez votre contenu et automatisez vos workflows 
-            avec la puissance de l'IA et des intégrations premium.
+          <p className="text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
+            Coordonnez vos équipes, vos contenus et vos performances depuis un cockpit unique,
+            pensé pour les organisations qui veulent industrialiser leur stratégie éditoriale.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="premium" size="xl" className="text-lg">
-              Essai Gratuit 14 jours
+            <Button
+              variant="premium"
+              size="xl"
+              className="text-lg"
+              onClick={handleStarterTrialClick}
+            >
+              Essai Starter 7 jours
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
             <Button variant="hero" size="xl" className="text-lg">
@@ -199,10 +234,12 @@ const LandingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
+                  <Button
+                    variant={plan.popular ? "premium" : "hero"}
                     className="w-full"
                     size="lg"
+                    onClick={plan.name === "Beta" ? handleBetaClick : undefined}
+                    disabled={plan.name === "Beta" && !stripeBetaLink}
                   >
                     Choisir {plan.name}
                   </Button>
