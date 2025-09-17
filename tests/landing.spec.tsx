@@ -51,4 +51,19 @@ describe('LandingPage', () => {
     fireEvent.click(proButton);
     expect(openSpy).toHaveBeenCalledWith('https://example.com/pro', '_blank', 'noopener,noreferrer');
   });
+
+  it('active le bouton Ambassadeur lorsque le lien dédié est configuré', async () => {
+    vi.stubEnv('VITE_LINK_PRO', '');
+    vi.stubEnv('VITE_LINK_AMBASSADOR', 'https://example.com/ambassador');
+
+    const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
+    await renderLanding();
+
+    const ambassadorButtons = screen.getAllByRole('button', { name: /Offre Ambassadeur/i });
+    expect(ambassadorButtons).toHaveLength(2);
+    ambassadorButtons.forEach((button) => expect(button).not.toBeDisabled());
+
+    fireEvent.click(ambassadorButtons[0]);
+    expect(openSpy).toHaveBeenCalledWith('https://example.com/ambassador', '_blank', 'noopener,noreferrer');
+  });
 });

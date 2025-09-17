@@ -8,6 +8,7 @@ import logoAeditus from "@/assets/logo-aeditus.jpg";
 const linkEssential = import.meta.env.VITE_LINK_ESSENTIAL as string | undefined;
 const linkStarter = import.meta.env.VITE_LINK_STARTER as string | undefined;
 const linkPro = import.meta.env.VITE_LINK_PRO as string | undefined;
+const linkAmbassador = import.meta.env.VITE_LINK_AMBASSADOR as string | undefined;
 const linkFynk = import.meta.env.VITE_LINK_FYNK as string | undefined;
 const linkFynkPro = import.meta.env.VITE_LINK_FYNK_PRO as string | undefined;
 
@@ -100,7 +101,12 @@ const LandingPage = () => {
               >
                 Voir les tarifs
               </Button>
-              <Button variant="luxury" size="xl" onClick={() => openLink(linkPro)} disabled={!linkPro}>
+              <Button
+                variant="luxury"
+                size="xl"
+                onClick={() => openLink(linkAmbassador)}
+                disabled={!linkAmbassador}
+              >
                 Offre Ambassadeur
               </Button>
             </div>
@@ -214,13 +220,18 @@ const LandingPage = () => {
               <li>• Réduction 3 mois via code</li>
               <li>• Places limitées</li>
             </ul>
-            <Button className="mt-6 w-full" variant="luxury" onClick={() => openLink(linkPro)} disabled={!linkPro}>
+            <Button
+              className="mt-6 w-full"
+              variant="luxury"
+              onClick={() => openLink(linkAmbassador)}
+              disabled={!linkAmbassador}
+            >
               Offre Ambassadeur
             </Button>
             <p className="mt-2 text-xs opacity-80">
               À l’étape Paiement, saisir <b>BETA2025</b>.
             </p>
-            {!linkPro && <p className="mt-1 text-xs opacity-60">Lien paiement non configuré</p>}
+            {!linkAmbassador && <p className="mt-1 text-xs opacity-60">Lien paiement non configuré</p>}
           </Card>
         </div>
 
