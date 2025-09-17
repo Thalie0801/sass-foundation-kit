@@ -4,8 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { getBetaLink } from "@/lib/env";
 
 const LandingPage = () => {
+  const betaLink = getBetaLink();
+
   const features = [
     {
       icon: Calendar,
@@ -53,6 +56,14 @@ const LandingPage = () => {
       features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
     }
   ];
+
+  const handleBetaClick = () => {
+    if (!betaLink) {
+      return;
+    }
+
+    window.open(betaLink, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-dark">
@@ -199,12 +210,14 @@ const LandingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
+                  <Button
+                    variant={plan.popular ? "premium" : "hero"}
                     className="w-full"
                     size="lg"
+                    onClick={plan.name === "Beta" ? handleBetaClick : undefined}
+                    disabled={plan.name === "Beta" && !betaLink}
                   >
-                    Choisir {plan.name}
+                    {plan.name === "Beta" ? "Rejoindre la Beta" : `Choisir ${plan.name}`}
                   </Button>
                 </CardContent>
               </Card>
