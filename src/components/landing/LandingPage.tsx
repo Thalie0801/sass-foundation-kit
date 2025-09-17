@@ -1,245 +1,366 @@
+import { Link } from "react-router-dom";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
-import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger
+} from "@/components/ui/accordion";
+import {
+  ArrowRight,
+  BarChart3,
+  Calendar,
+  CheckCircle2,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  Zap
+} from "lucide-react";
+import Header from "@/components/Header";
+import { cn } from "@/lib/utils";
+
+const features = [
+  {
+    icon: Sparkles,
+    title: "Assistant IA intégré",
+    description: "Co-pilotez vos campagnes avec une IA entraînée sur vos guidelines et vos objectifs."
+  },
+  {
+    icon: Calendar,
+    title: "Calendrier orchestré",
+    description: "Planifiez, validez et publiez sur tous vos canaux depuis une seule interface."
+  },
+  {
+    icon: Users,
+    title: "Collaboration multi-marques",
+    description: "Invitez vos équipes et vos clients pour valider chaque étape en temps réel."
+  },
+  {
+    icon: BarChart3,
+    title: "Pilotage des performances",
+    description: "Analysez vos KPI et ajustez vos campagnes grâce à des tableaux de bord prêts à l'emploi."
+  },
+  {
+    icon: Zap,
+    title: "Workflows automatisés",
+    description: "Déclenchez vos intégrations n8n et Postiz pour industrialiser votre production."
+  },
+  {
+    icon: ShieldCheck,
+    title: "Gouvernance avancée",
+    description: "Contrôlez les droits, validez les contenus et auditez vos process en un clic."
+  }
+];
+
+const faqs = [
+  {
+    question: "Aeditus propose-t-il un essai gratuit ?",
+    answer:
+      "Oui, vous disposez de 14 jours pour explorer toutes les fonctionnalités du plan Starter avant de choisir votre abonnement."
+  },
+  {
+    question: "Puis-je inviter des clients ou des freelances ?",
+    answer:
+      "Chaque plan inclut des rôles flexibles. Vous pouvez inviter vos partenaires en lecture seule ou avec des droits d'édition selon vos besoins."
+  },
+  {
+    question: "Comment fonctionne l'accès beta ?",
+    answer:
+      "Nous ouvrons 50 places pour co-construire les fonctionnalités IA avancées. Une fois votre demande envoyée, l'équipe vous recontacte sous 48h."
+  },
+  {
+    question: "Les données sont-elles sécurisées ?",
+    answer:
+      "Les données sont hébergées en Union Européenne avec chiffrement au repos et en transit, et une journalisation complète des actions."
+  }
+];
+
+type PlanBadgeTone = "promo" | "beta";
+
+type StandardPlan = {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  ctaLink: string;
+  ctaVariant: "hero" | "premium";
+  badge?: { label: string; tone: PlanBadgeTone };
+  isBeta?: false;
+};
+
+type BetaPlan = {
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  ctaVariant: "hero" | "premium";
+  badge?: { label: string; tone: PlanBadgeTone };
+  isBeta: true;
+  betaLink?: string;
+};
+
+type PricingPlan = StandardPlan | BetaPlan;
 
 const LandingPage = () => {
-  const features = [
-    {
-      icon: Calendar,
-      title: "Calendrier Éditorial",
-      description: "Planifiez et organisez votre contenu avec notre calendrier intelligent"
-    },
-    {
-      icon: Users,
-      title: "Multi-Tenant",
-      description: "Gérez plusieurs marques depuis une seule plateforme"
-    },
-    {
-      icon: BarChart3,
-      title: "Analytics & KPI",
-      description: "Suivez vos performances avec des métriques détaillées"
-    },
-    {
-      icon: Zap,
-      title: "Automatisation",
-      description: "Intégrations n8n et Postiz pour automatiser vos workflows"
-    }
-  ];
+  const betaAccessLink = (import.meta.env.VITE_BETA_ACCESS_URL ?? "") as string;
 
-  const plans = [
-    {
-      name: "Starter",
-      price: "29€",
-      period: "/mois",
-      description: "Pour les petites équipes qui débutent",
-      features: ["1 marque", "10 publications/mois", "Support email", "Calendrier basique"]
-    },
-    {
-      name: "Pro",
-      price: "79€",
-      period: "/mois",
-      description: "Pour les équipes qui grandissent",
-      features: ["5 marques", "100 publications/mois", "Support prioritaire", "Analytics avancées", "Intégrations"],
-      popular: true
-    },
-    {
-      name: "Beta",
-      price: "149€",
-      period: "/mois",
-      description: "Pour les grandes organisations",
-      features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
+  const plans = useMemo<PricingPlan[]>(
+    () => [
+      {
+        name: "Starter",
+        price: "29€",
+        period: "/mois",
+        description: "Tout pour lancer votre stratégie éditoriale avec un pack d'automations prêt-à-l'emploi.",
+        features: [
+          "1 marque",
+          "10 campagnes actives",
+          "Assistant IA Essentials",
+          "Support email"
+        ],
+        ctaLink: "/auth?mode=signup&plan=Starter",
+        ctaVariant: "premium" as const,
+        badge: { label: "Promo", tone: "promo" },
+        isBeta: false
+      },
+      {
+        name: "Growth",
+        price: "79€",
+        period: "/mois",
+        description: "Pensé pour les équipes marketing qui industrialisent leur production multi-canaux.",
+        features: [
+          "5 marques",
+          "50 campagnes actives",
+          "Validation client en marque blanche",
+          "Automations avancées"
+        ],
+        ctaLink: "/auth?mode=signup&plan=Growth",
+        ctaVariant: "hero" as const,
+        isBeta: false
+      },
+      {
+        name: "Scale",
+        price: "129€",
+        period: "/mois",
+        description: "Ajoutez de la gouvernance, du reporting et des intégrations personnalisées.",
+        features: [
+          "Marques illimitées",
+          "Dashboard KPI temps réel",
+          "SLA prioritaire",
+          "Exports BI"
+        ],
+        ctaLink: "/auth?mode=signup&plan=Scale",
+        ctaVariant: "hero" as const,
+        isBeta: false
+      },
+      {
+        name: "Suite IA",
+        price: "Beta",
+        period: "",
+        description: "Accès anticipé aux modules génératifs, scoring de contenus et prédictions de performance.",
+        features: [
+          "Coaching IA personnalisé",
+          "Templates dynamiques",
+          "Moteur de recommandations",
+          "Roadmap partagée avec l'équipe produit"
+        ],
+        isBeta: true,
+        ctaVariant: "premium" as const,
+        badge: { label: "Beta (50)", tone: "beta" },
+        betaLink: betaAccessLink
+      }
+    ],
+    [betaAccessLink]
+  );
+
+  const openBeta = (link?: string) => {
+    if (!link) {
+      return;
     }
-  ];
+
+    window.open(link, "_blank", "noopener,noreferrer");
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-dark">
-      {/* Header */}
-      <header className="border-b border-border/20 backdrop-blur-sm bg-background/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <img src={logoAeditus} alt="Aeditus" className="h-10 w-auto" />
-              <span className="text-xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-                Aeditus
-              </span>
+    <div className="min-h-screen bg-gradient-dark text-foreground">
+      <Header />
+      <main>
+        <section className="px-4 pb-24 pt-16 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+            <div className="space-y-8 text-center lg:text-left">
+              <Badge className="inline-flex items-center gap-2 border border-primary/30 bg-primary/10 text-primary">
+                <Sparkles className="h-4 w-4" />
+                Orchestration marketing augmentée
+              </Badge>
+              <h1 className="text-4xl font-bold leading-tight tracking-tight text-foreground sm:text-5xl md:text-6xl">
+                La fondation SaaS qui synchronise
+                <span className="block bg-gradient-premium bg-clip-text text-transparent"> contenus, équipes et résultats.</span>
+              </h1>
+              <p className="text-lg text-muted-foreground sm:text-xl">
+                Centralisez vos rituels éditoriaux, alignez vos parties prenantes et accélérez vos livrables grâce à
+                une plateforme pensée pour les agences et équipes marketing exigeantes.
+              </p>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                <Button asChild size="xl" variant="premium" className="text-base shadow-gold">
+                  <Link to="/auth?mode=signup&plan=Starter" className="inline-flex items-center gap-2">
+                    Commencer gratuitement
+                    <ArrowRight className="h-5 w-5" />
+                  </Link>
+                </Button>
+                <Button asChild size="xl" variant="hero" className="text-base">
+                  <Link to="#tarifs">Explorer les tarifs</Link>
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <Button variant="ghost" className="text-foreground">
-                Connexion
-              </Button>
-              <Button variant="premium" size="lg">
-                Commencer
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Hero Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <Badge className="mb-6 bg-primary/10 text-primary border-primary/20">
-            <Sparkles className="w-4 h-4 mr-2" />
-            Nouvelle génération de SaaS
-          </Badge>
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-gold bg-clip-text text-transparent leading-tight">
-            La Plateforme
-            <br />
-            Ultime pour vos
-            <br />
-            <span className="bg-gradient-premium bg-clip-text text-transparent">
-              Contenus
-            </span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto leading-relaxed">
-            Gérez vos marques, planifiez votre contenu et automatisez vos workflows 
-            avec la puissance de l'IA et des intégrations premium.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button variant="premium" size="xl" className="text-lg">
-              Essai Gratuit 14 jours
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button variant="hero" size="xl" className="text-lg">
-              Voir la Démo
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">
-              Fonctionnalités Premium
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Tout ce dont vous avez besoin pour réussir
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => (
-              <Card key={index} className="bg-card/50 backdrop-blur-sm border-border/20 hover:shadow-elegant transition-smooth">
-                <CardContent className="p-6">
-                  <feature.icon className="h-12 w-12 text-primary mb-4" />
-                  <h3 className="text-lg font-semibold mb-2 text-foreground">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground text-sm">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4 text-foreground">
-              Tarifs Transparents
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Choisissez le plan qui correspond à vos ambitions
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <Card 
-                key={index} 
-                className={`relative bg-card/50 backdrop-blur-sm border-border/20 transition-smooth hover:shadow-elegant ${
-                  plan.popular ? 'border-primary shadow-gold' : ''
-                }`}
-              >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-gold text-primary-foreground">
-                    Populaire
-                  </Badge>
-                )}
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-2 text-foreground">
-                    {plan.name}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    {plan.description}
-                  </p>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold bg-gradient-gold bg-clip-text text-transparent">
-                      {plan.price}
-                    </span>
-                    <span className="text-muted-foreground">
-                      {plan.period}
-                    </span>
+            <div className="relative flex items-center justify-center">
+              <div className="relative h-full w-full max-w-xl overflow-hidden rounded-3xl border border-border/30 bg-background/60 p-8 shadow-elegant">
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-sm font-medium uppercase tracking-[0.2em] text-primary/80">Pilotage 360°</p>
+                    <h2 className="mt-3 text-2xl font-semibold">Votre console marketing en temps réel</h2>
                   </div>
-                  <ul className="space-y-3 mb-8">
-                    {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center text-sm">
-                        <Sparkles className="h-4 w-4 text-primary mr-3" />
-                        {feature}
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    {features.slice(0, 4).map((feature) => (
+                      <div key={feature.title} className="rounded-2xl border border-border/30 bg-background/80 p-4">
+                        <feature.icon className="mb-3 h-6 w-6 text-primary" />
+                        <p className="text-sm font-medium text-foreground">{feature.title}</p>
+                        <p className="mt-1 text-xs text-muted-foreground">{feature.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="rounded-2xl border border-primary/30 bg-gradient-premium/40 p-4 text-sm text-primary-foreground">
+                    <p className="font-medium">"Nous orchestrons désormais 6 marques avec un seul sprint hebdomadaire"</p>
+                    <p className="mt-2 text-xs uppercase tracking-[0.3em] text-primary-foreground/80">Collectif Marketing Aéditus</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="fonctionnalites" className="border-t border-border/20 bg-background/40 px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            <div className="text-center">
+              <Badge className="mb-4 border border-primary/30 bg-primary/10 text-primary">Fonctionnalités</Badge>
+              <h2 className="text-3xl font-bold text-foreground sm:text-4xl">Tout votre dispositif éditorial, parfaitement orchestré</h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                Des modules pensés pour couvrir l'intégralité de la chaîne de valeur : stratégie, production, diffusion et pilotage.
+              </p>
+            </div>
+            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {features.map((feature) => (
+                <Card key={feature.title} className="h-full border-border/30 bg-card/70 backdrop-blur">
+                  <CardHeader>
+                    <feature.icon className="h-8 w-8 text-primary" />
+                    <CardTitle className="mt-4 text-xl">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-sm leading-relaxed text-muted-foreground">{feature.description}</CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="tarifs" className="px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl text-center">
+            <Badge className="mb-4 border border-primary/30 bg-primary/10 text-primary">Tarifs</Badge>
+            <h2 className="text-3xl font-bold text-foreground sm:text-4xl">Des plans taillés pour scaler votre organisation</h2>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Choisissez le niveau qui correspond à votre maturité. Vous pouvez évoluer à tout moment, sans frais cachés.
+            </p>
+          </div>
+          <div className="mx-auto mt-16 grid max-w-6xl gap-8 md:grid-cols-2 xl:grid-cols-4">
+            {plans.map((plan) => (
+              <Card
+                key={plan.name}
+                className={cn(
+                  "relative flex h-full flex-col justify-between border-border/30 bg-card/70 p-8 text-left shadow-none transition-all hover:shadow-elegant",
+                  plan.isBeta ? "border-primary/40" : ""
+                )}
+              >
+                {plan.badge ? (
+                  <Badge
+                    className={cn(
+                      "absolute -top-3 left-1/2 -translate-x-1/2 border-none px-3 py-1 text-xs font-semibold uppercase tracking-wide",
+                      plan.badge.tone === "promo"
+                        ? "bg-gradient-gold text-primary-foreground"
+                        : "bg-primary text-primary-foreground"
+                    )}
+                  >
+                    {plan.badge.label}
+                  </Badge>
+                ) : null}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-2xl font-semibold text-foreground">{plan.name}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">{plan.description}</p>
+                  </div>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-4xl font-bold text-foreground">{plan.price}</span>
+                    <span className="text-sm text-muted-foreground">{plan.period}</span>
+                  </div>
+                  <ul className="space-y-3 text-sm text-muted-foreground">
+                    {plan.features.map((feature: string) => (
+                      <li key={feature} className="flex items-center gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-primary" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
-                    className="w-full"
-                    size="lg"
-                  >
-                    Choisir {plan.name}
-                  </Button>
-                </CardContent>
+                </div>
+                <div className="mt-8">
+                  {plan.isBeta ? (
+                    <Button
+                      size="lg"
+                      variant={plan.ctaVariant}
+                      className="w-full"
+                      onClick={() => openBeta(plan.betaLink)}
+                      disabled={!plan.betaLink}
+                    >
+                      Rejoindre la beta
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  ) : (
+                    <Button asChild size="lg" variant={plan.ctaVariant} className="w-full">
+                      <Link to={plan.ctaLink}>{`Choisir ${plan.name}`}</Link>
+                    </Button>
+                  )}
+                </div>
               </Card>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CTA */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <Card className="bg-gradient-subtle border-border/20 shadow-premium">
-            <CardContent className="p-12">
-              <h2 className="text-4xl font-bold mb-6 text-foreground">
-                Prêt à Révolutionner
-                <br />
-                <span className="bg-gradient-gold bg-clip-text text-transparent">
-                  Votre Stratégie Contenu ?
-                </span>
-              </h2>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Rejoignez des milliers d'entreprises qui font confiance à Aeditus 
-                pour gérer leur présence digitale.
+        <section id="faq" className="border-t border-border/20 bg-background/40 px-4 py-24 sm:px-6 lg:px-8">
+          <div className="mx-auto grid max-w-5xl gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+            <div>
+              <Badge className="mb-4 border border-primary/30 bg-primary/10 text-primary">FAQ</Badge>
+              <h2 className="text-3xl font-bold text-foreground sm:text-4xl">Questions fréquentes</h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                Vous ne trouvez pas la réponse recherchée ? Écrivez-nous et nous reviendrons vers vous en moins de 24h.
               </p>
-              <Button variant="premium" size="xl" className="text-lg">
-                Commencer Maintenant
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-border/20 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <img src={logoAeditus} alt="Aeditus" className="h-8 w-auto" />
-              <span className="text-lg font-semibold bg-gradient-gold bg-clip-text text-transparent">
-                Aeditus
-              </span>
             </div>
-            <p className="text-muted-foreground text-sm">
-              © 2024 Aeditus. Tous droits réservés.
-            </p>
+            <Accordion type="single" collapsible className="space-y-4">
+              {faqs.map((faq) => (
+                <AccordionItem
+                  key={faq.question}
+                  value={faq.question}
+                  className="overflow-hidden rounded-2xl border border-border/30 bg-card/70 px-4"
+                >
+                  <AccordionTrigger className="text-left text-base font-semibold text-foreground">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-6 text-sm text-muted-foreground">{faq.answer}</AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
-        </div>
-      </footer>
+        </section>
+      </main>
     </div>
   );
 };
