@@ -71,6 +71,7 @@ Environment variables are loaded from the `.env` file at the root of the project
 | `VITE_SUPABASE_URL` | Base URL for the Supabase REST and realtime services. | Available in **Project Settings → API** within the Supabase dashboard. |
 | `VITE_STRIPE_BETA_LINK` | Shareable Stripe Payment Link that allows users to purchase or join the beta offering promoted in the app. | In the Stripe Dashboard, create or open the Payment Link associated with your beta product (test mode for development), then copy the link URL from the "Share" panel. |
 |  | • Sans `VITE_STRIPE_BETA_LINK`, le CTA bêta est désactivé et affiche le toast « Lien Beta non configuré ». |  |
+| `VITE_LINK_AMBASSADOR` | Stripe payment link dedicated to the ambassador offer highlighted on the landing page. | Create the ambassador Payment Link in Stripe, then copy the shareable URL. |
 
 > ⚠️ Les variables `VITE_SUPABASE_URL` et `VITE_SUPABASE_PUBLISHABLE_KEY` sont obligatoires : le client Supabase lèvera une erreur explicite si elles ne sont pas définies.
 
