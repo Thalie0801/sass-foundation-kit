@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Sparkles, Calendar, Users, BarChart3, Zap } from "lucide-react";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { env } from "@/lib/env";
 
 const LandingPage = () => {
   const features = [
@@ -52,6 +53,24 @@ const LandingPage = () => {
       features: ["Marques illimitées", "Publications illimitées", "Support dédié", "API complète", "Fonctionnalités beta"]
     }
   ];
+
+  const starterSignupUrl = env.VITE_STARTER_SIGNUP_URL?.trim() || "/auth?plan=starter";
+  const betaCheckoutLink = env.VITE_STRIPE_BETA_LINK?.trim() || "";
+
+  const handlePlanCta = (planName: string) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (planName === "Starter") {
+      window.open(starterSignupUrl, "_self");
+      return;
+    }
+
+    if (planName === "Beta" && betaCheckoutLink) {
+      window.open(betaCheckoutLink, "_blank", "noopener,noreferrer");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-dark">
@@ -185,10 +204,11 @@ const LandingPage = () => {
                       </li>
                     ))}
                   </ul>
-                  <Button 
-                    variant={plan.popular ? "premium" : "hero"} 
+                  <Button
+                    variant={plan.popular ? "premium" : "hero"}
                     className="w-full"
                     size="lg"
+                    onClick={() => handlePlanCta(plan.name)}
                   >
                     Choisir {plan.name}
                   </Button>
