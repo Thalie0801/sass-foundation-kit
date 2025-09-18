@@ -135,7 +135,7 @@ export default function AeditusLanding() {
           </div>
           <div className="flex items-center gap-3">
             <a href="#offres" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex">Voir les offres</a>
-            <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
+            <a href="/auth" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
               Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
             </a>
           </div>
