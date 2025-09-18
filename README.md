@@ -80,6 +80,22 @@ For Stripe, ensure you create the Payment Link in **test mode** while working lo
 
 Simply open [Lovable](https://lovable.dev/projects/bb4c8e0f-7e4f-4a6a-84c7-f8bd0db941e0) and click on Share -> Publish.
 
+## Déploiement Vercel
+
+1. **Lier le dépôt GitHub.** Sur [vercel.com](https://vercel.com), cliquez sur **Add New Project**, importez ce dépôt Git et sélectionnez la branche à déployer.
+2. **Définir toutes les variables d’environnement.** Dans **Settings → Environment Variables**, créez les clés suivantes avec les mêmes valeurs que votre fichier `.env` :
+
+   | Variable | Description |
+   | --- | --- |
+   | `VITE_SUPABASE_PROJECT_ID` | Identifiant de votre projet Supabase. |
+   | `VITE_SUPABASE_PUBLISHABLE_KEY` | Clé API publique Supabase. |
+   | `VITE_SUPABASE_URL` | URL de base Supabase. |
+   | `VITE_STRIPE_BETA_LINK` | Lien Stripe Payment Link utilisé par le CTA bêta. |
+
+3. **Configurer le webhook Stripe.** Dans le dashboard Stripe, créez un endpoint webhook pointant vers `https://<votre-domaine-vercel>/api/stripe-webhook` et sélectionnez les événements requis par l’application.
+4. **Ajouter le domaine Vercel dans Supabase Auth.** Dans Supabase, ouvrez **Authentication → URL Configuration** et ajoutez le domaine Vercel (et le domaine personnalisé éventuel) dans les listes d’URL autorisées pour les redirections et les e-mails magiques.
+5. **Vérifier la build et les fonctions serverless.** Vercel exécute `pnpm build`, attend la sortie statique dans `dist/` et déploie les handlers Edge/Serverless présents dans `api/*.ts`. Assurez-vous que ces artefacts se génèrent correctement en local avant de lancer le déploiement.
+
 ## Can I connect a custom domain to my Lovable project?
 
 Yes, you can!
