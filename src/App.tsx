@@ -7,6 +7,9 @@ import NewLandingPage from "./components/landing/NewLandingPage";
 import AuthPage from "./components/auth/AuthPage";
 import { AppLayout } from "./components/layout/AppLayout";
 import Dashboard from "./pages/app/Dashboard";
+import AdminDashboard from "./pages/app/AdminDashboard";
+import ClientDashboard from "./pages/app/ClientDashboard";
+import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,9 +24,25 @@ const App = () => (
           <Route path="/" element={<NewLandingPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/app" element={
-            <AppLayout>
-              <Dashboard />
-            </AppLayout>
+            <ProtectedRoute>
+              <AppLayout>
+                <ClientDashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/app/admin" element={
+            <ProtectedRoute requireRole="super_admin">
+              <AppLayout>
+                <AdminDashboard />
+              </AppLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/app/dashboard" element={
+            <ProtectedRoute>
+              <AppLayout>
+                <Dashboard />
+              </AppLayout>
+            </ProtectedRoute>
           } />
           <Route path="/app/calendar" element={
             <AppLayout>

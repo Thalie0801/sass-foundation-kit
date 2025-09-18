@@ -175,6 +175,39 @@ export type Database = {
           },
         ]
       }
+      features: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_name: string
+          enabled_by_default: boolean | null
+          id: string
+          name: string
+          requires_subscription: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_name: string
+          enabled_by_default?: boolean | null
+          id?: string
+          name: string
+          requires_subscription?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string
+          enabled_by_default?: boolean | null
+          id?: string
+          name?: string
+          requires_subscription?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       gamification: {
         Row: {
           articles_created: number
@@ -263,6 +296,7 @@ export type Database = {
           full_name: string | null
           id: string
           plan: string | null
+          role: Database["public"]["Enums"]["user_role"] | null
           subscription_status: string | null
           trial_ends_at: string | null
           updated_at: string
@@ -275,6 +309,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           plan?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
           subscription_status?: string | null
           trial_ends_at?: string | null
           updated_at?: string
@@ -287,6 +322,7 @@ export type Database = {
           full_name?: string | null
           id?: string
           plan?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
           subscription_status?: string | null
           trial_ends_at?: string | null
           updated_at?: string
@@ -381,6 +417,58 @@ export type Database = {
         }
         Relationships: []
       }
+      user_features: {
+        Row: {
+          created_at: string | null
+          enabled: boolean | null
+          enabled_at: string | null
+          enabled_by: string | null
+          feature_id: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          enabled?: boolean | null
+          enabled_at?: string | null
+          enabled_by?: string | null
+          feature_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          enabled?: boolean | null
+          enabled_at?: string | null
+          enabled_by?: string | null
+          feature_id?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_features_enabled_by_fkey"
+            columns: ["enabled_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "user_features_feature_id_fkey"
+            columns: ["feature_id"]
+            isOneToOne: false
+            referencedRelation: "features"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_features_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -398,9 +486,13 @@ export type Database = {
         Args: { current_level: number }
         Returns: number
       }
+      user_has_feature: {
+        Args: { feature_name: string; user_uuid?: string }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "admin" | "client" | "super_admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -527,6 +619,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["admin", "client", "super_admin"],
+    },
   },
 } as const
