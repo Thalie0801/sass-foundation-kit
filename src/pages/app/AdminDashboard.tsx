@@ -12,27 +12,17 @@ import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Users, Crown, Shield, Clock, Loader2, Lock } from "lucide-react";
 
-type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
+type ManagedProfile = Database["public"]["Tables"]["profiles"]["Row"];
 
-interface ManagedProfile extends ProfileRow {
-  role?: "admin" | "client" | "super_admin" | null;
-}
+type ManagedFeature = Pick<
+  Database["public"]["Tables"]["features"]["Row"],
+  "id" | "name" | "display_name" | "description" | "requires_subscription" | "enabled_by_default"
+>;
 
-interface ManagedFeature {
-  id: string;
-  name: string;
-  display_name: string;
-  description: string | null;
-  requires_subscription: boolean | null;
-  enabled_by_default: boolean | null;
-}
-
-interface UserFeatureRecord {
-  id: string;
-  user_id: string;
-  feature_id: string;
-  enabled: boolean | null;
-}
+type UserFeatureRecord = Pick<
+  Database["public"]["Tables"]["user_features"]["Row"],
+  "id" | "user_id" | "feature_id" | "enabled"
+>;
 
 const AdminDashboard = () => {
   const { profile, user, refresh } = useAuth();

@@ -4,27 +4,19 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { differenceInCalendarDays, isAfter } from "date-fns";
 
-export type UserRole = "admin" | "client" | "super_admin";
+export type UserRole = Database["public"]["Enums"]["user_role"];
 
-type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"] & {
-  role?: UserRole | null;
-};
+type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
 
-type FeatureRow = {
-  id: string;
-  name: string;
-  display_name: string;
-  description: string | null;
-  requires_subscription: boolean | null;
-  enabled_by_default: boolean | null;
-};
+type FeatureRow = Pick<
+  Database["public"]["Tables"]["features"]["Row"],
+  "id" | "name" | "display_name" | "description" | "requires_subscription" | "enabled_by_default"
+>;
 
-type UserFeatureRow = {
-  id: string;
-  user_id: string;
-  feature_id: string;
-  enabled: boolean | null;
-};
+type UserFeatureRow = Pick<
+  Database["public"]["Tables"]["user_features"]["Row"],
+  "id" | "user_id" | "feature_id" | "enabled"
+>;
 
 export interface FeatureWithState {
   id: string;
