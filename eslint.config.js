@@ -23,4 +23,11 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    files: ["src/components/landing/NewLandingPage.tsx"],
+    rules: {
+      "no-irregular-whitespace": "off",
+      "no-empty": "off",
+    },
+  },
 );

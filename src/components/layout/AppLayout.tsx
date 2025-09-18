@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/navigation/AppSidebar";
@@ -7,36 +5,31 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { Loader2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 export function AppLayout({ children }: AppLayoutProps) {
-  const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { user, profile, loading, subscription } = useAuth();
 
-  useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        setSession(session);
-        setUser(session?.user ?? null);
-        setLoading(false);
-      }
-    );
+  const subscriptionLabel = () => {
+    if (!profile || profile.role !== "client") return null;
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    if (subscription.isTrialing) {
+      return `Essai (${subscription.daysLeft} jours restants)`;
+    }
 
-    return () => subscription.unsubscribe();
-  }, []);
+    if (subscription.requiresPayment) {
+      return "Abonnement requis";
+    }
+
+    return subscription.plan ? `Plan ${subscription.plan}` : "Client";
+  };
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -57,24 +50,16 @@ export function AppLayout({ children }: AppLayoutProps) {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <img src={logoAeditus} alt="Aeditus" className="h-16 w-auto mx-auto mb-4 animate-pulse" />
-          <div className="text-lg text-muted-foreground">Chargement...</div>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
-  }
-
-  if (!user) {
-    window.location.href = "/auth";
-    return null;
   }
 
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="min-h-screen flex w-full bg-background">
         <AppSidebar />
-        
+
         <div className="flex-1 flex flex-col">
           {/* Header */}
           <header className="h-14 border-b border-border bg-card/50 backdrop-blur-sm flex items-center justify-between px-4">
@@ -89,8 +74,27 @@ export function AppLayout({ children }: AppLayoutProps) {
             </div>
             
             <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-2">
+                {profile?.role && (
+                  <Badge variant="outline" className="border-border/40 text-xs capitalize">
+                    {profile.role.replace("_", " ")}
+                  </Badge>
+                )}
+                {subscriptionLabel() && (
+                  <Badge
+                    variant={subscription.requiresPayment && profile?.role === "client" ? "destructive" : "outline"}
+                    className={
+                      subscription.requiresPayment && profile?.role === "client"
+                        ? "text-xs"
+                        : "border-primary/40 text-xs text-primary"
+                    }
+                  >
+                    {subscriptionLabel()}
+                  </Badge>
+                )}
+              </div>
               <span className="text-sm text-muted-foreground">
-                {user.email}
+                {user?.email}
               </span>
               <Button
                 variant="ghost"

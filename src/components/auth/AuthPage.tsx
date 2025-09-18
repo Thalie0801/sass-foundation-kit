@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import logoAeditus from "@/assets/logo-aeditus.jpg";
+import { addDays } from "date-fns";
 
 const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +54,7 @@ const AuthPage = () => {
     setError("");
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
@@ -68,6 +69,29 @@ const AuthPage = () => {
       if (error) {
         setError(error.message);
         return;
+      }
+
+      if (data.user) {
+        const trialEndsAt = addDays(new Date(), 7).toISOString();
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .upsert(
+            {
+              user_id: data.user.id,
+              email,
+              full_name: fullName,
+              company: companyName,
+              subscription_status: "trial",
+              plan: "starter",
+              trial_ends_at: trialEndsAt,
+              role: "client",
+            },
+            { onConflict: "user_id" }
+          );
+
+        if (profileError) {
+          console.error(profileError);
+        }
       }
 
       toast({
