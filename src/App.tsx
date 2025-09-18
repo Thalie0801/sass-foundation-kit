@@ -8,9 +8,11 @@ import AuthPage from "./components/auth/AuthPage";
 import { AppLayout } from "./components/layout/AppLayout";
 import Dashboard from "./pages/app/Dashboard";
 import AdminDashboard from "./pages/app/AdminDashboard";
-import ClientDashboard from "./pages/app/ClientDashboard";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import RoleBasedDashboard from "./pages/app/RoleBasedDashboard";
+import SubscriptionGate from "./pages/app/SubscriptionGate";
 import NotFound from "./pages/NotFound";
+import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -19,99 +21,160 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<NewLandingPage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/app" element={
-            <ProtectedRoute>
-              <AppLayout>
-                <ClientDashboard />
-              </AppLayout>
-            </ProtectedRoute>
-          } />
-          <Route path="/app/admin" element={
-            <ProtectedRoute requireRole="super_admin">
-              <AppLayout>
-                <AdminDashboard />
-              </AppLayout>
-            </ProtectedRoute>
-          } />
-          <Route path="/app/dashboard" element={
-            <ProtectedRoute>
-              <AppLayout>
-                <Dashboard />
-              </AppLayout>
-            </ProtectedRoute>
-          } />
-          <Route path="/app/calendar" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Calendrier Éditorial</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/brands" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Gestion des Marques</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/team" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Équipe</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/analytics" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Analytics & KPI</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/integrations" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Intégrations</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/projects" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Projets</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/billing" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Abonnement & Facturation</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          <Route path="/app/settings" element={
-            <AppLayout>
-              <div className="p-6">
-                <h1 className="text-2xl font-bold">Paramètres</h1>
-                <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
-              </div>
-            </AppLayout>
-          } />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<NewLandingPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route
+              path="/app"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <RoleBasedDashboard />
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/admin"
+              element={
+                <ProtectedRoute allowedRoles={["admin", "super_admin"]}>
+                  <AppLayout>
+                    <AdminDashboard />
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/dashboard"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <Dashboard />
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/calendar"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Calendrier Éditorial</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/brands"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Gestion des Marques</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/team"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Équipe</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/analytics"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Analytics & KPI</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/integrations"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Intégrations</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/projects"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Projets</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/paywall"
+              element={
+                <ProtectedRoute allowWhenRestricted>
+                  <AppLayout>
+                    <SubscriptionGate />
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/billing"
+              element={
+                <ProtectedRoute allowWhenRestricted>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Abonnement & Facturation</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/app/settings"
+              element={
+                <ProtectedRoute>
+                  <AppLayout>
+                    <div className="p-6">
+                      <h1 className="text-2xl font-bold">Paramètres</h1>
+                      <p className="text-muted-foreground">Fonctionnalité en cours de développement...</p>
+                    </div>
+                  </AppLayout>
+                </ProtectedRoute>
+              }
+            />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );
