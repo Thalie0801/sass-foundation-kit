@@ -58,14 +58,14 @@ const connectors: Connector[] = [
     note: "Workflow vidéos — 1 retry programmé"
   },
   {
-    name: "Postiz",
+    name: "Orchestrateur social",
     status: "ok",
     mode: "Live",
     lastCheck: "il y a 10 min",
     note: "20 réseaux connectés"
   },
   {
-    name: "WordPress",
+    name: "CMS headless",
     status: "ok",
     mode: "Live",
     lastCheck: "il y a 45 min",
@@ -281,7 +281,7 @@ export default function AdminConsole() {
               rel="noreferrer"
               className="mt-4 inline-flex items-center gap-2 text-xs text-indigo-200 hover:text-white"
             >
-              Voir la configuration Postiz <ExternalLink className="h-4 w-4" />
+              Voir la configuration orchestrateur social <ExternalLink className="h-4 w-4" />
             </a>
           </div>
         </div>

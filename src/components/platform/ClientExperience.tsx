@@ -48,7 +48,7 @@ const onboardingChecklist = [
   },
   {
     title: "Access réseaux",
-    detail: "Connexion sécurisée Postiz & WordPress",
+    detail: "Connexion sécurisée orchestrateur social & CMS headless",
     icon: LockIcon
   }
 ];

@@ -200,7 +200,8 @@ const featureBlocks: { title: string; description: string; bullets: string[]; ic
 const adminModules: { title: string; description: string; icon: IconType; bullets: string[] }[] = [
   {
     title: "Intégrations clés",
-    description: "Connecteurs Stripe, n8n, Postiz, WordPress, Replicate et Fal.ai en quelques minutes.",
+    description:
+      "Connecteurs Stripe, n8n, orchestrateur social, CMS headless, Replicate et Fal.ai en quelques minutes.",
     icon: Puzzle,
     bullets: [
       "Connexion guidée + test de clé/API", 
@@ -214,7 +215,7 @@ const adminModules: { title: string; description: string; icon: IconType; bullet
     icon: FlaskConical,
     bullets: [
       "Contenus fictifs (articles/images/vidéos) générés automatiquement",
-      "Simulation de publication côté Postiz (brouillons seulement)",
+      "Simulation de publication via l’orchestrateur social (brouillons seulement)",
       "Stripe en test mode avec paiements fictifs"
     ]
   },
@@ -279,7 +280,7 @@ const stackOverview: { title: string; icon: IconType; items: string[] }[] = [
       "Back & DB : Supabase (auth, stockage, fonctions)",
       "Orchestration : n8n + workers dédiés",
       "IA Texte : OpenAI, Médias : Replicate & Fal.ai",
-      "Publication : Postiz multi-réseaux + WordPress",
+      "Publication : orchestrateur multi-réseaux + CMS headless",
       "Billing : Stripe Billing, Email : SendGrid/Postmark"
     ]
   },
@@ -298,7 +299,7 @@ const stackOverview: { title: string; icon: IconType; items: string[] }[] = [
 
 const weekRoadmap: { day: string; focus: string; details: string }[] = [
   { day: "Jour 1", focus: "Auth multi-rôle + Stripe", details: "Connexion clients/admin, test du toggle annuel (-10 %)" },
-  { day: "Jour 2", focus: "n8n + Postiz", details: "Workflows génération + publication connectés" },
+  { day: "Jour 2", focus: "n8n + orchestrateur social", details: "Workflows génération + publication connectés" },
   { day: "Jour 3", focus: "Dashboard client", details: "Plan éditorial, calendrier & KPI accessibles" },
   { day: "Jour 4", focus: "Dashboard admin", details: "Tenants, intégrations & sandbox Stripe/n8n" },
   { day: "Jour 5", focus: "Affiliation", details: "Gestion des pourcentages 10 % / 15 % et tracking" },
