@@ -16,16 +16,7 @@ import {
   BadgeCheck,
   Send,
   MessageSquare,
-  Bot,
-  Puzzle,
-  FlaskConical,
-  GaugeCircle,
-  Radar,
-  Users,
-  Headset,
-  Kanban,
-  Layers,
-  Database
+  Bot
 } from "lucide-react";
 
 /**
@@ -196,124 +187,6 @@ const featureBlocks: { title: string; description: string; bullets: string[]; ic
   }
 ];
 
-const adminModules: { title: string; description: string; icon: IconType; bullets: string[] }[] = [
-  {
-    title: "Intégrations clés",
-    description:
-      "Connecteurs Stripe, n8n, orchestrateur social, CMS headless, Replicate et Fal.ai en quelques minutes.",
-    icon: Puzzle,
-    bullets: [
-      "Connexion guidée + test de clé/API", 
-      "Suivi de santé des webhooks et tokens chiffrés",
-      "Logs détaillés pour chaque connecteur"
-    ]
-  },
-  {
-    title: "Sandbox & QA",
-    description: "Mode Test pour valider l’infrastructure avant le go-live.",
-    icon: FlaskConical,
-    bullets: [
-      "Contenus fictifs (articles/images/vidéos) générés automatiquement",
-      "Simulation de publication via l’orchestrateur social (brouillons seulement)",
-      "Stripe en test mode avec paiements fictifs"
-    ]
-  },
-  {
-    title: "Offres & quotas",
-    description: "Pilotez plans Essential/Starter/Pro et add-ons en toute clarté.",
-    icon: GaugeCircle,
-    bullets: [
-      "Quotas contenus/assets paramétrables par tenant",
-      "Add-ons Fynk, Ambassadeurs et exclusivités activables",
-      "Historique de consommation & alertes de dépassement"
-    ]
-  },
-  {
-    title: "Supervision",
-    description: "Vue globale de vos clients, workflows et incidents.",
-    icon: Radar,
-    bullets: [
-      "Tenants, plans et contenus accessibles en un coup d’œil",
-      "Audit log : actions, erreurs, automatisations",
-      "Monitoring temps réel des workflows n8n"
-    ]
-  },
-  {
-    title: "CRM & email",
-    description: "Segmentez, tagguez et automatisez vos communications.",
-    icon: Users,
-    bullets: [
-      "Historique client complet + tags personnalisés",
-      "Campagnes produit, upsell et support via SendGrid/Postmark",
-      "Affiliation 10 % (15 % après 20 clients) suivie automatiquement"
-    ]
-  },
-  {
-    title: "Support & mémoire tonale",
-    description: "Centralisez tickets Alfie, incidents et préférences de marque.",
-    icon: Headset,
-    bullets: [
-      "Tickets créés depuis le chat Alfie avec contexte",
-      "Gestion incidents + statut partagé avec les clients",
-      "Mémoire tonale accessible pour ajustements rapides"
-    ]
-  },
-  {
-    title: "Roadmap interne",
-    description: "Synchronisée avec le module feedback côté client.",
-    icon: Kanban,
-    bullets: [
-      "Suggestion clients + votes consolidés",
-      "Statuts : acceptée, en cours, livrée",
-      "Publication instantanée dans la roadmap publique"
-    ]
-  }
-];
-
-const stackOverview: { title: string; icon: IconType; items: string[] }[] = [
-  {
-    title: "Stack technique",
-    icon: Layers,
-    items: [
-      "Front : Bolt (React + Tailwind) déployé sur Netlify",
-      "Back & DB : Supabase (auth, stockage, fonctions)",
-      "Orchestration : n8n + workers dédiés",
-      "IA Texte : OpenAI, Médias : Replicate & Fal.ai",
-      "Publication : orchestrateur multi-réseaux + CMS headless",
-      "Billing : Stripe Billing, Email : SendGrid/Postmark"
-    ]
-  },
-  {
-    title: "Données clés",
-    icon: Database,
-    items: [
-      "Tables feedback (id, tenant_id, title, description, votes, status)",
-      "Tables tests (id, type, status, result) pour le mode QA",
-      "Stockage sécurisé des tokens & brand kits",
-      "Logs workflow & audit chiffrés",
-      "Exports KPI disponibles en CSV, PDF, PowerPoint"
-    ]
-  }
-];
-
-const weekRoadmap: { day: string; focus: string; details: string }[] = [
-  { day: "Jour 1", focus: "Auth multi-rôle + Stripe", details: "Connexion clients/admin, test du toggle annuel (-10 %)" },
-  { day: "Jour 2", focus: "n8n + orchestrateur social", details: "Workflows génération + publication connectés" },
-  { day: "Jour 3", focus: "Dashboard client", details: "Plan éditorial, calendrier & KPI accessibles" },
-  { day: "Jour 4", focus: "Dashboard admin", details: "Tenants, intégrations & sandbox Stripe/n8n" },
-  { day: "Jour 5", focus: "Affiliation", details: "Gestion des pourcentages 10 % / 15 % et tracking" },
-  { day: "Jour 6", focus: "Notifications & exports", details: "Multicanal + exports CSV/PDF/PPT" },
-  { day: "Jour 7", focus: "Roadmap + Feedback + QA", details: "Module public, votes et sandbox de tests" }
-];
-
-const nonFunctional: string[] = [
-  "Sandbox complet : contenus fictifs + Stripe test + publication simulée",
-  "Performance mobile : LCP < 2,5 s grâce au rendu optimisé",
-  "Sécurité RGPD : tokens chiffrés, consentements stockés",
-  "Monitoring & alerting des workflows n8n",
-  "Backups réguliers Supabase + supervision uptime"
-];
-
 // Dev-time sanity checks (non-blocking)
 if (typeof window !== "undefined") {
   try {
@@ -385,17 +258,15 @@ export default function AeditusLanding() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="group inline-flex flex-col rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 hover:text-white"
+              className="inline-flex items-center rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 hover:text-white"
             >
-              <span>Se connecter</span>
-              <span className="text-[10px] font-normal text-white/50 transition group-hover:text-white/70">Auth + plateforme clients</span>
+              Se connecter
             </Link>
             <Link
               to="/register"
-              className="group inline-flex flex-col rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+              className="inline-flex items-center rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
             >
-              <span>S’inscrire</span>
-              <span className="text-[10px] font-normal text-indigo-900/80">Essai 7 jours + email de vérif</span>
+              S’inscrire
             </Link>
           </div>
         </nav>
@@ -821,49 +692,6 @@ export default function AeditusLanding() {
         </div>
       </section>
 
-      {/* Plateforme admin */}
-      <section id="admin" className="border-t border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Plateforme admin</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Supervisez vos intégrations, quotas et clients avec une vue unifiée, du sandbox à la roadmap interne.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {adminModules.map((module, index) => {
-              const Icon = module.icon;
-              return (
-                <motion.div
-                  key={module.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-cyan-500/20 text-cyan-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-lg text-white">{module.title}</h3>
-                      <p className="text-sm text-white/70">{module.description}</p>
-                    </div>
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm text-white/80">
-                    {module.bullets.map((bullet, bulletIndex) => (
-                      <li key={bulletIndex} className="inline-flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
       {/* Ambassadeurs */}
       <section id="ambassadeurs" className="border-t border-white/5">
         <div className={`${container} py-16 md:py-20`}>
@@ -932,102 +760,6 @@ export default function AeditusLanding() {
               </tbody>
             </table>
           </div>
-        </div>
-      </section>
-
-      {/* Stack & données */}
-      <section id="stack" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Stack & données</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Une architecture moderne prête pour l’automatisation et la scalabilité, avec stockage sécurisé des informations sensibles.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {stackOverview.map((stack, index) => {
-              const Icon = stack.icon;
-              return (
-                <motion.div
-                  key={stack.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <h3 className="font-heading text-lg text-white">{stack.title}</h3>
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm text-white/80">
-                    {stack.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className="inline-flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {item}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Roadmap 7 jours */}
-      <section id="roadmap" className="border-t border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Roadmap 7 jours</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Lancement prioritaire sur les fondamentaux : authentification, génération, publication et boucle de feedback.
-          </p>
-          <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
-            <table className="w-full min-w-[720px] border-collapse text-sm">
-              <thead className="bg-white/5 text-left text-white/70">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Jour</th>
-                  <th className="px-4 py-3 font-medium">Focus</th>
-                  <th className="px-4 py-3 font-medium">Détails</th>
-                </tr>
-              </thead>
-              <tbody>
-                {weekRoadmap.map((item, index) => (
-                  <tr key={item.day} className={index % 2 ? "bg-white/0" : "bg-white/5"}>
-                    <td className="px-4 py-3 text-white/80">{item.day}</td>
-                    <td className="px-4 py-3 text-white">{item.focus}</td>
-                    <td className="px-4 py-3 text-white/70">{item.details}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Exigences non-fonctionnelles */}
-      <section id="non-functional" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Exigences non-fonctionnelles</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Fiabilité, performance et conformité dès le premier jour grâce à un cadre de test complet.
-          </p>
-          <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {nonFunctional.map((item, index) => (
-              <motion.li
-                key={item}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                custom={index}
-                className="inline-flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/80"
-              >
-                <ShieldCheck className="mt-0.5 h-5 w-5 text-indigo-300" />
-                <span>{item}</span>
-              </motion.li>
-            ))}
-          </ul>
         </div>
       </section>
 
