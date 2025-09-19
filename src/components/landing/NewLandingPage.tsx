@@ -373,26 +373,54 @@ export default function AeditusLanding() {
             <span className="font-heading text-white/90 group-hover:text-white">Æditus</span>
           </a>
           <div className="hidden items-center gap-6 md:flex">
-          <a href="#about" className="text-sm text-white/70 hover:text-white">Fonctionnalités</a>
-          <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">Comment ça marche</a>
-          <a href="#offres" className="text-sm text-white/70 hover:text-white">Offres</a>
-          <a href="#faq" className="text-sm text-white/70 hover:text-white">FAQ</a>
-          <Link to="/app/client" className="text-sm text-white/70 transition hover:text-white">
-            Plateforme
-          </Link>
-        </div>
-        <div className="flex items-center gap-3">
-          <Link
-            to="/app/client"
-            className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 md:inline-flex"
-          >
-            Voir la plateforme
-          </Link>
-          <a href="#offres" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex">Voir les offres</a>
-          <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
-            Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
-          </a>
-        </div>
+            <a href="#about" className="text-sm text-white/70 hover:text-white">
+              Fonctionnalités
+            </a>
+            <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">
+              Comment ça marche
+            </a>
+            <a href="#offres" className="text-sm text-white/70 hover:text-white">
+              Offres
+            </a>
+            <a href="#faq" className="text-sm text-white/70 hover:text-white">
+              FAQ
+            </a>
+            <Link to="/app/client" className="text-sm text-white/70 transition hover:text-white">
+              Plateforme
+            </Link>
+            <Link to="/login" className="text-sm text-white/70 transition hover:text-white">
+              Connexion
+            </Link>
+            <Link to="/register" className="text-sm text-white/70 transition hover:text-white">
+              Inscription
+            </Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link
+              to="/login"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
+            >
+              Connexion
+            </Link>
+            <Link
+              to="/app/client"
+              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 md:inline-flex"
+            >
+              Voir la plateforme
+            </Link>
+            <a
+              href="#offres"
+              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex"
+            >
+              Voir les offres
+            </a>
+            <a
+              href="#offres"
+              className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+            >
+              Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
+            </a>
+          </div>
         </nav>
       </header>
 
