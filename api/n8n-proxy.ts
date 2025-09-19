@@ -1,7 +1,8 @@
 export async function POST(request: Request) {
   const {
     path = '/webhook/aeditus/health',
-    token = process.env.N8N_TOKEN
+    token = process.env.N8N_TOKEN,
+    payload
   } = await request.json()
 
   if (!process.env.N8N_BASE_URL) {
@@ -12,8 +13,15 @@ export async function POST(request: Request) {
   }
 
   const url = `${process.env.N8N_BASE_URL}${path}`
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
   const response = await fetch(url, {
-    headers: token ? { Authorization: `Bearer ${token}` } : undefined
+    method: 'POST',
+    headers,
+    body: JSON.stringify(payload ?? {})
   })
   const text = await response.text()
   return new Response(text, { status: response.status })

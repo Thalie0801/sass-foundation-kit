@@ -15,12 +15,13 @@ function getStripeSecretKey(): string {
   return secret
 }
 
-function getSiteUrl(): string {
+function getSiteUrl(request: Request): string {
   const siteUrl = process.env.SITE_URL
-  if (!siteUrl) {
-    throw new Error('Missing SITE_URL environment variable')
+  if (siteUrl) {
+    return siteUrl
   }
-  return siteUrl
+
+  return new URL(request.url).origin
 }
 
 export async function POST(request: Request) {
@@ -36,7 +37,7 @@ export async function POST(request: Request) {
 
     const params = new URLSearchParams()
     params.append('customer', customerId)
-    params.append('return_url', `${getSiteUrl()}${returnPath}`)
+    params.append('return_url', `${getSiteUrl(request)}${returnPath}`)
 
     const response = await fetch(`${STRIPE_API_BASE_URL}/billing_portal/sessions`, {
       method: 'POST',

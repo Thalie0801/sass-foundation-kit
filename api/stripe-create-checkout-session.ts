@@ -15,12 +15,13 @@ function getStripeSecretKey(): string {
   return secret
 }
 
-function getSiteUrl(): string {
+function getSiteUrl(request: Request): string {
   const siteUrl = process.env.SITE_URL
-  if (!siteUrl) {
-    throw new Error('Missing SITE_URL environment variable')
+  if (siteUrl) {
+    return siteUrl
   }
-  return siteUrl
+
+  return new URL(request.url).origin
 }
 
 export async function POST(request: Request) {
@@ -41,7 +42,7 @@ export async function POST(request: Request) {
     params.append('line_items[0][quantity]', '1')
     params.append('allow_promotion_codes', 'true')
 
-    const siteUrl = getSiteUrl()
+    const siteUrl = getSiteUrl(request)
     params.append('success_url', `${siteUrl}${successPath}?session_id={CHECKOUT_SESSION_ID}`)
     params.append('cancel_url', `${siteUrl}${cancelPath}`)
 
