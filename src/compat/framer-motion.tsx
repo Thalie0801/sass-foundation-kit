@@ -31,8 +31,25 @@ type MotionComponent<T extends ElementType> = ForwardRefExoticComponent<
 const cache = new Map<string, MotionComponent<ElementType>>();
 
 function createMotion<T extends ElementType>(type: T): MotionComponent<T> {
-  return forwardRef<unknown, ComponentPropsWithoutRef<T> & MotionProps>(({ children, ...rest }, ref) =>
-    createElement(type, { ref, ...rest }, children),
+  return forwardRef<unknown, ComponentPropsWithoutRef<T> & MotionProps>(
+    (
+      {
+        children,
+        animate,
+        initial,
+        exit,
+        variants,
+        transition,
+        whileHover,
+        whileTap,
+        whileInView,
+        viewport,
+        custom,
+        ...domProps
+      },
+      ref,
+    ) =>
+      createElement(type, { ref, ...domProps }, children),
   );
 }
 
