@@ -103,7 +103,7 @@ export const Link = ({ to, onClick, target, rel, ...rest }: LinkProps) => {
 type NavLinkProps = LinkProps & {
   end?: boolean;
   className?: string | ((args: { isActive: boolean }) => string);
-  style?: ComponentProps<"a">["style"] | ((args: { isActive: boolean }) => ComponentProps<"a">["style"]);
+  style?: React.CSSProperties | ((args: { isActive: boolean }) => React.CSSProperties | undefined);
 };
 
 export const NavLink = ({ end, className, style, ...rest }: NavLinkProps) => {
