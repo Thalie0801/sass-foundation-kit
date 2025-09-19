@@ -56,7 +56,7 @@ export default function SandboxExperience() {
             ? {
                 ...test,
                 status: "Succès",
-                result: "Simulation Postiz OK — brouillon créé"
+                result: "Simulation orchestrateur social OK — brouillon créé"
               }
             : test
         )
@@ -155,7 +155,7 @@ export default function SandboxExperience() {
           </div>
           <ul className="mt-4 space-y-3 text-xs text-white/60">
             <li>Activer / désactiver la génération de contenus fictifs</li>
-            <li>Simulation publication Postiz uniquement en brouillon</li>
+            <li>Simulation publication orchestrateur social uniquement en brouillon</li>
             <li>Stripe test mode avec webhooks sécurisés</li>
             <li>Option : importer un CSV de clients fictifs</li>
           </ul>
@@ -167,7 +167,7 @@ export default function SandboxExperience() {
           <ul className="mt-4 space-y-3 text-xs text-white/60">
             <li>Exports tests : CSV / PDF / PPT pour démonstrations</li>
             <li>Rapport envoyé à l’admin après chaque batch</li>
-            <li>Capture auto des logs n8n et Postiz</li>
+            <li>Capture auto des logs n8n et orchestrateur social</li>
             <li>
               <button
                 type="button"
