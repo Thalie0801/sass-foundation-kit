@@ -1,63 +1,36 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
 
-const renderLanding = async () => {
-  const module = await import('@/components/landing/LandingPage');
-  const LandingPage = module.default;
-  return render(
-    <MemoryRouter>
-      <LandingPage />
-    </MemoryRouter>
-  );
-};
+import NewLandingPage, { calc } from '@/components/landing/NewLandingPage';
 
-describe('LandingPage', () => {
-  beforeEach(() => {
-    vi.resetModules();
-    vi.unstubAllEnvs();
+describe('NewLandingPage', () => {
+  it('affiche le hero et oriente les CTA vers les offres', () => {
+    render(<NewLandingPage />);
+
+    expect(
+      screen.getByText(/plan éditorial mensuel & calendrier de publication/i),
+    ).toBeInTheDocument();
+
+    const ctas = screen.getAllByRole('link', { name: /Démarrer l’essai 7 jours/i });
+    expect(ctas).not.toHaveLength(0);
+    ctas.forEach((cta) => {
+      expect(cta).toHaveAttribute('href', '#offres');
+    });
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  it('bascule vers la tarification annuelle', () => {
+    render(<NewLandingPage />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Annuel' }));
+
+    expect(screen.getByTestId('price-pro')).toHaveTextContent('–10% vs mensuel');
   });
+});
 
-  it('affiche le slogan et le CTA Voir les tarifs', async () => {
-    const scrollIntoView = vi.fn();
-    vi.stubEnv('VITE_LINK_PRO', '');
-    await renderLanding();
-    expect(screen.getByText(/la plateforme éditoriale qui publie pour vous/i)).toBeInTheDocument();
-    const cta = screen.getAllByRole('button', { name: /Voir les tarifs/i })[0];
-    const querySpy = vi
-      .spyOn(document, 'querySelector')
-      .mockReturnValue({ scrollIntoView } as unknown as Element);
-    fireEvent.click(cta);
-    expect(scrollIntoView).toHaveBeenCalledWith({ behavior: 'smooth' });
-    querySpy.mockRestore();
-  });
-
-  it('active les boutons de paiement lorsque les liens sont configurés', async () => {
-    vi.stubEnv('VITE_LINK_ESSENTIAL', 'https://example.com/essential');
-    vi.stubEnv('VITE_LINK_STARTER', 'https://example.com/starter');
-    vi.stubEnv('VITE_LINK_PRO', 'https://example.com/pro');
-    vi.stubEnv('VITE_LINK_FYNK', 'https://example.com/fynk');
-    vi.stubEnv('VITE_LINK_FYNK_PRO', 'https://example.com/fynk-pro');
-
-    const openSpy = vi.spyOn(window, 'open').mockImplementation(() => null);
-    await renderLanding();
-
-    const proButton = screen.getByRole('button', { name: /Choisir Pro/i });
-    expect(proButton).not.toBeDisabled();
-    fireEvent.click(proButton);
-    expect(openSpy).toHaveBeenCalledWith('https://example.com/pro', '_blank', 'noopener,noreferrer');
-  });
-
-  it('désactive les boutons lorsque le lien contient uniquement des espaces', async () => {
-    vi.stubEnv('VITE_LINK_PRO', '   ');
-
-    await renderLanding();
-
-    const proButton = screen.getByRole('button', { name: /Choisir Pro/i });
-    expect(proButton).toBeDisabled();
+describe('calc helpers', () => {
+  it('calcule les tarifs avec les remises attendues', () => {
+    expect(calc.discountedFirstMonth(179)).toBe(134.25);
+    expect(calc.discountedFirstMonth(399)).toBe(299.25);
+    expect(calc.annual(79)).toBeCloseTo(853.2, 2);
   });
 });
