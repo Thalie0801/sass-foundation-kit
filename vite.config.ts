@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
       "framer-motion": fileURLToPath(new URL("./src/compat/framer-motion.tsx", import.meta.url)),
+      "react-router-dom": fileURLToPath(new URL("./src/lib/router.tsx", import.meta.url)),
     },
   },
   test: {

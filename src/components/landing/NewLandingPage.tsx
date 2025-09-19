@@ -1,5 +1,7 @@
+/* eslint-disable react-refresh/only-export-components */
 import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import {
   Sparkles,
   Calendar,
@@ -370,17 +372,26 @@ export default function AeditusLanding() {
             <span className="font-heading text-white/90 group-hover:text-white">Æditus</span>
           </a>
           <div className="hidden items-center gap-6 md:flex">
-            <a href="#about" className="text-sm text-white/70 hover:text-white">Fonctionnalités</a>
-            <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">Comment ça marche</a>
-            <a href="#offres" className="text-sm text-white/70 hover:text-white">Offres</a>
-            <a href="#faq" className="text-sm text-white/70 hover:text-white">FAQ</a>
-          </div>
-          <div className="flex items-center gap-3">
-            <a href="#offres" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex">Voir les offres</a>
-            <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
-              Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
-            </a>
-          </div>
+          <a href="#about" className="text-sm text-white/70 hover:text-white">Fonctionnalités</a>
+          <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">Comment ça marche</a>
+          <a href="#offres" className="text-sm text-white/70 hover:text-white">Offres</a>
+          <a href="#faq" className="text-sm text-white/70 hover:text-white">FAQ</a>
+          <Link to="/app/client" className="text-sm text-white/70 transition hover:text-white">
+            Plateforme
+          </Link>
+        </div>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/app/client"
+            className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 md:inline-flex"
+          >
+            Voir la plateforme
+          </Link>
+          <a href="#offres" className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex">Voir les offres</a>
+          <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
+            Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
+          </a>
+        </div>
         </nav>
       </header>
 
@@ -404,6 +415,12 @@ export default function AeditusLanding() {
               Plan éditorial complet chaque mois. Publications hebdomadaires sur tous vos réseaux, en 2 clics — gain : +10 h de travail/mois. Vidéos & visuels inclus. Option : tout en automatique (réversible).
             </motion.p>
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" custom={3} viewport={{ once: true }} className="mt-8 flex flex-wrap items-center gap-3">
+              <Link
+                to="/app/client"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold text-white/90 shadow-lg shadow-indigo-500/20 transition hover:border-white/40 hover:text-white"
+              >
+                Explorer la plateforme <ChevronRight className="h-4 w-4" />
+              </Link>
               <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-[#0B1110] shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
                 Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
               </a>
@@ -644,6 +661,7 @@ export default function AeditusLanding() {
                 "Option : articles & Fynk activables"
               ]}
               cta="Choisir Essential"
+              ctaLink="/app/client"
               highlight={false}
             />
             <PriceCard
@@ -663,6 +681,7 @@ export default function AeditusLanding() {
                 "Essai 7 jours (sans publication)"
               ]}
               cta="Choisir Starter"
+              ctaLink="/app/client"
               highlight={false}
             />
             <PriceCard
@@ -682,6 +701,7 @@ export default function AeditusLanding() {
                 "Essai 7 jours (sans publication)"
               ]}
               cta="Choisir Pro"
+              ctaLink="/app/admin"
               highlight
             />
           </div>
@@ -745,6 +765,7 @@ export default function AeditusLanding() {
               ]}
               note="1 marque/abo · annulation à tout moment"
               cta="Choisir Fynk Basic"
+              ctaLink="/app/sandbox"
             />
             <AddOnCard
               title="Fynk Pro — 69€ /mois"
@@ -758,6 +779,7 @@ export default function AeditusLanding() {
               ]}
               note="1 marque/abo · annulation à tout moment"
               cta="Choisir Fynk Pro"
+              ctaLink="/app/admin"
             />
           </div>
 
@@ -774,9 +796,12 @@ export default function AeditusLanding() {
                   <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
                 </ul>
               </div>
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60">
+              <Link
+                to="/app/roadmap"
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60"
+              >
                 Devenir Ambassadeur <ChevronRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -842,9 +867,12 @@ export default function AeditusLanding() {
                   <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
                 </ul>
               </div>
-              <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60">
+              <Link
+                to="/app/roadmap"
+                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60"
+              >
                 Devenir Ambassadeur <ChevronRight className="h-4 w-4" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -1051,7 +1079,8 @@ function PriceCard({
   highlight,
   dataTestId,
   strike,
-  discountNote
+  discountNote,
+  ctaLink = "/app/client"
 }: {
   badge?: string;
   title: string;
@@ -1063,6 +1092,7 @@ function PriceCard({
   dataTestId?: string;
   strike?: string;
   discountNote?: string;
+  ctaLink?: string;
 }) {
   return (
     <div data-testid={dataTestId} className={`relative rounded-2xl border ${highlight ? "border-indigo-400/40 bg-indigo-400/10" : "border-white/10 bg-white/5"} p-6`}>
@@ -1085,14 +1115,37 @@ function PriceCard({
           <li key={i} className="inline-flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {p}</li>
         ))}
       </ul>
-      <a href="#" className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 ${highlight ? "bg-indigo-500 text-[#0B1110] hover:bg-indigo-400 focus:ring-indigo-400/60" : "border border-white/10 text-white/80 hover:bg-white/5 focus:ring-white/40"}`}>
+      <Link
+        to={ctaLink}
+        className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 ${
+          highlight
+            ? "bg-indigo-500 text-[#0B1110] hover:bg-indigo-400 focus:ring-indigo-400/60"
+            : "border border-white/10 text-white/80 hover:bg-white/5 focus:ring-white/40"
+        }`}
+      >
         {cta} <ChevronRight className="h-4 w-4" />
-      </a>
+      </Link>
     </div>
   );
 }
 
-function AddOnCard({ title, price, points, note, cta, variant }: { title: string; price: string; points: string[]; note?: string; cta?: string; variant?: 'basic' | 'pro' }) {
+function AddOnCard({
+  title,
+  price,
+  points,
+  note,
+  cta,
+  variant,
+  ctaLink = "/app/sandbox"
+}: {
+  title: string;
+  price: string;
+  points: string[];
+  note?: string;
+  cta?: string;
+  variant?: "basic" | "pro";
+  ctaLink?: string;
+}) {
   const isPro = variant === 'pro';
   const frame = isPro ? 'border-cyan-400/40 bg-cyan-400/10' : 'border-indigo-400/40 bg-indigo-400/10';
   const chip = isPro ? 'bg-cyan-400/20 text-cyan-100 border-cyan-400/30' : 'bg-indigo-400/20 text-indigo-100 border-indigo-400/30';
@@ -1110,9 +1163,12 @@ function AddOnCard({ title, price, points, note, cta, variant }: { title: string
       </ul>
       {note && <p className="mt-3 text-xs text-white/50">{note}</p>}
       {cta && (
-        <a href="#" className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/40">
+        <Link
+          to={ctaLink}
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/40"
+        >
           {cta} <ChevronRight className="h-4 w-4" />
-        </a>
+        </Link>
       )}
     </div>
   );
