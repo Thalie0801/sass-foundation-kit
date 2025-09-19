@@ -25,7 +25,7 @@ describe('NewLandingPage', () => {
 
     expect(screen.getByRole('link', { name: /Explorer la plateforme/i })).toHaveAttribute('href', '/app/client');
     expect(screen.getByRole('link', { name: /Se connecter/i })).toHaveAttribute('href', '/login');
-    expect(screen.getByRole('link', { name: /S’inscrire/i })).toHaveAttribute('href', '/register');
+    expect(screen.getByRole('link', { name: /s[’']inscrire/i })).toHaveAttribute('href', '/register');
   });
 
   it('bascule vers la tarification annuelle', () => {

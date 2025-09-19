@@ -17,8 +17,5 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: "./tests/setup.ts",
-    alias: {
-      "react-router-dom": fileURLToPath(new URL("./tests/mocks/react-router-dom.tsx", import.meta.url)),
-    },
   },
 });
