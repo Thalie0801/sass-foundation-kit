@@ -13,7 +13,9 @@
     "paths": {
       "@/*": ["./src/*"],
       "framer-motion": ["./src/compat/framer-motion"],
-      "framer-motion/*": ["./src/compat/framer-motion"]
+      "framer-motion/*": ["./src/compat/framer-motion"],
+      "react-router-dom": ["./src/lib/router"],
+      "react-router-dom/*": ["./src/lib/router"]
     },
     "noImplicitAny": false,
     "noUnusedParameters": false,

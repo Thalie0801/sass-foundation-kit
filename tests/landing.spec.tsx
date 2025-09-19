@@ -1,11 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 
 import NewLandingPage, { calc } from '@/components/landing/NewLandingPage';
 
 describe('NewLandingPage', () => {
   it('affiche le hero et oriente les CTA vers les offres', () => {
-    render(<NewLandingPage />);
+    render(
+      <MemoryRouter>
+        <NewLandingPage />
+      </MemoryRouter>
+    );
 
     expect(
       screen.getByText(/plan éditorial mensuel & calendrier de publication/i),
@@ -16,10 +21,17 @@ describe('NewLandingPage', () => {
     ctas.forEach((cta) => {
       expect(cta).toHaveAttribute('href', '#offres');
     });
+
+    expect(screen.getByRole('link', { name: /Explorer la plateforme/i })).toHaveAttribute('href', '/app');
+    expect(screen.getByRole('link', { name: /Voir la plateforme/i })).toHaveAttribute('href', '/app');
   });
 
   it('bascule vers la tarification annuelle', () => {
-    render(<NewLandingPage />);
+    render(
+      <MemoryRouter>
+        <NewLandingPage />
+      </MemoryRouter>
+    );
 
     fireEvent.click(screen.getByRole('button', { name: 'Annuel' }));
 

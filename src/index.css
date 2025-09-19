@@ -39,7 +39,12 @@
 
     --ring: var(--primary);
 
-    --radius: 0.75rem;
+    --radius: 14px;
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --brand: 222 84% 56%;
 
     /* Premium Gradients */
     --gradient-gold: linear-gradient(135deg, hsl(45 45% 50%), hsl(45 55% 65%));
