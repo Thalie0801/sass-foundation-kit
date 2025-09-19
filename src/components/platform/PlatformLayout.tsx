@@ -1,12 +1,14 @@
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Bot,
   ClipboardCheck,
   LayoutDashboard,
+  LogOut,
   Rocket,
   ShieldCheck
 } from "lucide-react";
+import { useAuth } from "../auth/AuthProvider";
 
 const navItems = [
   {
@@ -42,6 +44,13 @@ const navItems = [
 export default function PlatformLayout() {
   const location = useLocation();
   const active = navItems.find((item) => location.pathname.includes(item.to));
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
@@ -61,10 +70,22 @@ export default function PlatformLayout() {
               </h1>
             </div>
           </div>
-          <div className="hidden items-center gap-3 md:flex">
-            <span className="inline-flex items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs text-indigo-200">
+          <div className="flex items-center gap-3">
+            <span className="hidden items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-xs text-indigo-200 md:inline-flex">
               <ClipboardCheck className="h-4 w-4" /> Version démo connectée
             </span>
+            {user && (
+              <span className="max-w-[160px] truncate rounded-xl border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80">
+                {user.name ?? user.email}
+              </span>
+            )}
+            <button
+              type="button"
+              onClick={handleSignOut}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-1 text-xs text-white/80 transition hover:bg-white/10"
+            >
+              <LogOut className="h-3 w-3" /> Déconnexion
+            </button>
           </div>
         </div>
         <nav className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-4 pb-4 md:px-6">
