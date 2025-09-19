@@ -58,6 +58,17 @@ const useRouteContext = () => useContext(RouteContext);
 
 export const useLocation = () => useRouter().location;
 
+export const useNavigate = () => {
+  const router = useRouter();
+
+  return useCallback(
+    (to: string, options?: { replace?: boolean }) => {
+      router.navigate(to, options);
+    },
+    [router]
+  );
+};
+
 export const Outlet = () => {
   const outlet = useContext(OutletContext);
   return <>{outlet}</>;
