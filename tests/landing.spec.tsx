@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+
 import { MemoryRouter } from 'react-router-dom';
 
 import NewLandingPage, { calc } from '@/components/landing/NewLandingPage';
@@ -23,7 +24,8 @@ describe('NewLandingPage', () => {
     });
 
     expect(screen.getByRole('link', { name: /Explorer la plateforme/i })).toHaveAttribute('href', '/app/client');
-    expect(screen.getByRole('link', { name: /Voir la plateforme/i })).toHaveAttribute('href', '/app/client');
+    expect(screen.getByRole('link', { name: /Se connecter/i })).toHaveAttribute('href', '/login');
+    expect(screen.getByRole('link', { name: /S’inscrire/i })).toHaveAttribute('href', '/register');
   });
 
   it('bascule vers la tarification annuelle', () => {

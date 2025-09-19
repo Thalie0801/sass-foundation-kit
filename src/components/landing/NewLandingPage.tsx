@@ -17,7 +17,6 @@ import {
   Send,
   MessageSquare,
   Bot,
-  Lightbulb,
   Puzzle,
   FlaskConical,
   GaugeCircle,
@@ -136,63 +135,63 @@ const journeySteps: { title: string; description: string; icon: IconType; tag: s
 
 const featureBlocks: { title: string; description: string; bullets: string[]; icon: IconType }[] = [
   {
-    title: "Génération & planification",
-    description: "Contenus pensés mobile-first, compatibles AI Overviews et sans chevauchement entre clients.",
+    title: "Stratégie éditoriale data-driven",
+    description: "Alignement entre objectifs business, saisons clés et signaux SEO pour chaque marque.",
     icon: Sparkles,
     bullets: [
-      "Replicate & Fal.ai pour visuels/vidéos HÉRO + snacks",
-      "Ajout libre de vos propres contenus et briefs",
-      "Calendrier avec quotas, heatmap et scénarios auto"
+      "Cartographie des piliers + scoring d’opportunités",
+      "Angles validés avec garde‑fous tonaux",
+      "Calendrier glissant avec rétroplanning automatique"
     ]
   },
   {
-    title: "Publication automatique",
-    description: "Orchestration fiable pour vos réseaux sociaux et votre blog sans prise de tête.",
+    title: "Studio média intégré",
+    description: "Production centralisée des vidéos, visuels et variantes prêtes à publier.",
+    icon: Video,
+    bullets: [
+      "Scripts, voice-over et templates motion partagés",
+      "Exports multi-formats (1:1, 9:16, 16:9, carrousels)",
+      "Bibliothèque de médias approuvés & brand kit vivant"
+    ]
+  },
+  {
+    title: "Distribution multi-canal",
+    description: "Programmation intelligente et publication fiable sur tous vos canaux clés.",
     icon: Send,
     bullets: [
-      "Jusqu’à 20 réseaux sociaux connectés",
-      "Articles longs exportés et publiables en un clic",
-      "File d’attente, retries et alertes proactives"
+      "Jusqu’à 20 réseaux sociaux + blog + newsletter",
+      "Fenêtres d’orchestration optimisées par réseau",
+      "File d’attente sécurisée, retries et alertes proactives"
     ]
   },
   {
-    title: "KPI & optimisation",
-    description: "Visualisez la performance et itérez rapidement sur les formats gagnants.",
+    title: "Pilotage KPI & reporting",
+    description: "Visualisez vos performances, recevez des recommandations et partagez des bilans clairs.",
     icon: BarChart3,
     bullets: [
-      "Dashboard impressions, engagement, clics, abonnés",
-      "Exports CSV, PDF ou PowerPoint partagés en un clic",
-      "Suggestions Alfie sur titres, formats & timings"
+      "Dashboard impressions, clics, abonnés, conversions",
+      "Exports CSV, PDF ou PowerPoint prêt pour les équipes",
+      "Insights automatiques sur formats et messages gagnants"
     ]
   },
   {
-    title: "Alfie Copilot",
-    description: "Votre copilote intégré pour créer, comprendre et obtenir du support sans attendre.",
+    title: "Alfie Copilot & support",
+    description: "Un copilote IA + humain pour créer, comprendre et itérer sans friction.",
     icon: Bot,
     bullets: [
-      "Génération guidée pour articles, scripts, captions",
-      "Explication des KPI et recommandations personnalisées",
-      "Chat Q/R + tickets remontés automatiquement à l’admin"
+      "Guides intelligents pour briefs, scripts et captions",
+      "Explication des KPI + actions recommandées",
+      "Chat 24/7 avec escalade vers l’équipe Æditus"
     ]
   },
   {
-    title: "Roadmap & feedback",
-    description: "Un cycle d’amélioration continue visible par vos clients et votre équipe.",
-    icon: Lightbulb,
+    title: "Collaboration & conformité",
+    description: "Tout le monde aligné : validations rapides, historique complet et conformité RGPD.",
+    icon: ShieldCheck,
     bullets: [
-      "Roadmap publique : prévu, en test, livré",
-      "Bouton “Suggérer une amélioration” connecté à la base",
-      "Tri par popularité côté admin, statut mis à jour en temps réel"
-    ]
-  },
-  {
-    title: "Add-on Fynk",
-    description: "Boost d’engagement social conforme aux règles plateformes, validation en un clic.",
-    icon: Layers,
-    bullets: [
-      "Basic : IG/FB, 400 interactions qualifiées/mois",
-      "Pro : IG/FB/LinkedIn, 1500 interactions + leads suivis",
-      "Actions limitées aux likes, follows & commentaires validés"
+      "Workflows d’approbation 2 clics + commentaires contextuels",
+      "Historique illimité des versions & accès par rôle",
+      "Conservation des consentements & traçabilité des publications"
     ]
   }
 ];
@@ -373,53 +372,31 @@ export default function AeditusLanding() {
             <span className="font-heading text-white/90 group-hover:text-white">Æditus</span>
           </a>
           <div className="hidden items-center gap-6 md:flex">
-            <a href="#about" className="text-sm text-white/70 hover:text-white">
+            <a href="#features" className="text-sm text-white/70 hover:text-white">
               Fonctionnalités
             </a>
-            <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">
-              Comment ça marche
+            <a href="#gains" className="text-sm text-white/70 hover:text-white">
+              Gains clients
             </a>
             <a href="#offres" className="text-sm text-white/70 hover:text-white">
-              Offres
+              Tarifs
             </a>
-            <a href="#faq" className="text-sm text-white/70 hover:text-white">
-              FAQ
-            </a>
-            <Link to="/app/client" className="text-sm text-white/70 transition hover:text-white">
-              Plateforme
-            </Link>
-            <Link to="/login" className="text-sm text-white/70 transition hover:text-white">
-              Connexion
-            </Link>
-            <Link to="/register" className="text-sm text-white/70 transition hover:text-white">
-              Inscription
-            </Link>
           </div>
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
+              className="group inline-flex flex-col rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 hover:text-white"
             >
-              Connexion
+              <span>Se connecter</span>
+              <span className="text-[10px] font-normal text-white/50 transition group-hover:text-white/70">Auth + plateforme clients</span>
             </Link>
             <Link
-              to="/app/client"
-              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 md:inline-flex"
+              to="/register"
+              className="group inline-flex flex-col rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
             >
-              Voir la plateforme
+              <span>S’inscrire</span>
+              <span className="text-[10px] font-normal text-indigo-900/80">Essai 7 jours + email de vérif</span>
             </Link>
-            <a
-              href="#offres"
-              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex"
-            >
-              Voir les offres
-            </a>
-            <a
-              href="#offres"
-              className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
-            >
-              Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
-            </a>
           </div>
         </nav>
       </header>
@@ -522,47 +499,55 @@ export default function AeditusLanding() {
         <div className={`${container} py-16 md:py-20`}>
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Ce que fait Æditus</motion.h2>
           <p className={`${sub} mt-2 max-w-3xl`}>
-            Un <strong>plan éditorial complet chaque mois</strong> + <strong>publication hebdomadaire</strong> sur vos réseaux, avec votre voix de marque.
-            Validation en 2 clics ou <strong>mode automatique</strong> (réversible). Visuels, vidéos et déclinaisons inclus, SEO prêt pour les AI Overviews.
+            <strong>Stratégie éditoriale, production média et diffusion</strong> : Æditus livre chaque mois un plan structuré, vos formats prêts à publier et l’orchestration multi‑réseaux qui respecte votre voix de marque.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Plan éditorial</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>Priorités mensuelles, angles, calendrier lisible</li>
-                <li>Garde‑fous de ton : <em>votre voix, votre personnalité</em></li>
-                <li>Objectifs & KPI réalistes</li>
+              <h3 className="font-heading text-white">Stratégie pilotée par la data</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/80">
+                <li>Veille concurrentielle + opportunités SEO</li>
+                <li>Angles, piliers & calendrier priorisés</li>
+                <li>Checklist AI Overviews + tonalité maîtrisée</li>
               </ul>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Publication hebdo</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>Multi‑réseaux, timing optimisé</li>
-                <li>Vidéos courtes & visuels inclus</li>
-                <li>Calendrier drag‑and‑drop ou auto</li>
+              <h3 className="font-heading text-white">Studio média intégré</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/80">
+                <li>Vidéos HÉRO + déclinaisons shorts & carrousels</li>
+                <li>Brand kit, scripts et prompts partagés</li>
+                <li>Variantes prêtes pour blog, newsletter, ads</li>
               </ul>
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Validation simple</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>2 clics : OK / Éditer / Remplacer</li>
-                <li>Journal de publication transparent</li>
-                <li>Réglages rapides en cours de mois</li>
+              <h3 className="font-heading text-white">Pilotage & accompagnement</h3>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-white/80">
+                <li>Validation 2 clics ou automation réversible</li>
+                <li>Alertes Slack/Email + historique clair</li>
+                <li>Support humain + Alfie Copilot 24/7</li>
               </ul>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Ce que vous gagnez */}
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
+      {/* Gains clients */}
+      <section id="gains" className="border-b border-white/5 bg-[#0E1514]">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>
+            Ce que gagnent les clients Æditus
+          </motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Mesures issues des premiers comptes pilotes (3 mois d’accompagnement minimum, publication hebdomadaire sur 4 réseaux).
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-3">
             {[
-              {t:"+10 h/mois récupérées", d:"moins d’allers‑retours, plus d’exécution"},
-              {t:"Visibilité mesurable", d:"journal de publication & KPI lisibles"},
-              {t:"Cohérence de marque", d:"même voix, partout, chaque semaine"},
-              {t:"Simplicité", d:"validation 2 clics ou mode auto réversible"}
-            ].map((b,i)=> (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <h4 className="font-heading text-white">{b.t}</h4>
-                <p className="mt-1 text-sm text-white/70">{b.d}</p>
+              { value: "+12 h/mois", label: "de temps opérationnel récupéré (briefs, validations, coordination)" },
+              { value: "+48 %", label: "de portée organique moyenne supplémentaire sur 90 jours" },
+              { value: "x2,1", label: "de conversations qualifiées (DM, réponses, prises de RDV)" }
+            ].map((item) => (
+              <div key={item.value} className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
+                <div className="font-heading text-3xl text-white">{item.value}</div>
+                <p className="mt-2 text-sm text-white/70">{item.label}</p>
               </div>
             ))}
           </div>
