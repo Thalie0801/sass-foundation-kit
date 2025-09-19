@@ -11,7 +11,20 @@ import {
   Check,
   ArrowRightLeft,
   MousePointerClick,
-  BadgeCheck
+  BadgeCheck,
+  Send,
+  MessageSquare,
+  Bot,
+  Lightbulb,
+  Puzzle,
+  FlaskConical,
+  GaugeCircle,
+  Radar,
+  Users,
+  Headset,
+  Kanban,
+  Layers,
+  Database
 } from "lucide-react";
 
 /**
@@ -72,6 +85,233 @@ export const calc = {
   }
 };
 
+type IconType = React.ElementType;
+
+const journeySteps: { title: string; description: string; icon: IconType; tag: string }[] = [
+  {
+    title: "Onboarding express",
+    description: "Formulaire niche, objectifs et brand kit importé en 5 min. Alfie apprend votre ton immédiatement.",
+    icon: PenLine,
+    tag: "Jour 0"
+  },
+  {
+    title: "Plan éditorial généré",
+    description: "Articles SEO prêts pour les AI Overviews, déclinaisons sociales et médias suggérés.",
+    icon: Sparkles,
+    tag: "Jour 1"
+  },
+  {
+    title: "Calendrier centralisé",
+    description: "Backlog intelligent → slots. Quotas par réseau, heatmap d’opportunités, drag & drop.",
+    icon: Calendar,
+    tag: "Jour 1"
+  },
+  {
+    title: "Validation éclair",
+    description: "OK / Éditer / Remplacer. Mode automatique réversible. Commentaires contextuels accessibles.",
+    icon: MousePointerClick,
+    tag: "Chaque semaine"
+  },
+  {
+    title: "Publication orchestrée",
+    description: "Posts, visuels et vidéos publiés sur 20+ réseaux et blog. File d’attente sécurisée + retries.",
+    icon: Send,
+    tag: "Chaque semaine"
+  },
+  {
+    title: "KPI & Copilot",
+    description: "Dashboard impressions, clics, abonnés. Alfie explique les variations et propose des actions.",
+    icon: BarChart3,
+    tag: "Jour 30"
+  },
+  {
+    title: "Roadmap & feedback",
+    description: "Module intégré pour découvrir les features à venir et voter/suggérer en 2 clics.",
+    icon: MessageSquare,
+    tag: "En continu"
+  }
+];
+
+const featureBlocks: { title: string; description: string; bullets: string[]; icon: IconType }[] = [
+  {
+    title: "Génération & planification",
+    description: "Contenus pensés mobile-first, compatibles AI Overviews et sans chevauchement entre clients.",
+    icon: Sparkles,
+    bullets: [
+      "Replicate & Fal.ai pour visuels/vidéos HÉRO + snacks",
+      "Ajout libre de vos propres contenus et briefs",
+      "Calendrier avec quotas, heatmap et scénarios auto"
+    ]
+  },
+  {
+    title: "Publication automatique",
+    description: "Orchestration fiable pour vos réseaux sociaux et votre blog sans prise de tête.",
+    icon: Send,
+    bullets: [
+      "Jusqu’à 20 réseaux sociaux connectés",
+      "Articles longs exportés et publiables en un clic",
+      "File d’attente, retries et alertes proactives"
+    ]
+  },
+  {
+    title: "KPI & optimisation",
+    description: "Visualisez la performance et itérez rapidement sur les formats gagnants.",
+    icon: BarChart3,
+    bullets: [
+      "Dashboard impressions, engagement, clics, abonnés",
+      "Exports CSV, PDF ou PowerPoint partagés en un clic",
+      "Suggestions Alfie sur titres, formats & timings"
+    ]
+  },
+  {
+    title: "Alfie Copilot",
+    description: "Votre copilote intégré pour créer, comprendre et obtenir du support sans attendre.",
+    icon: Bot,
+    bullets: [
+      "Génération guidée pour articles, scripts, captions",
+      "Explication des KPI et recommandations personnalisées",
+      "Chat Q/R + tickets remontés automatiquement à l’admin"
+    ]
+  },
+  {
+    title: "Roadmap & feedback",
+    description: "Un cycle d’amélioration continue visible par vos clients et votre équipe.",
+    icon: Lightbulb,
+    bullets: [
+      "Roadmap publique : prévu, en test, livré",
+      "Bouton “Suggérer une amélioration” connecté à la base",
+      "Tri par popularité côté admin, statut mis à jour en temps réel"
+    ]
+  },
+  {
+    title: "Add-on Fynk",
+    description: "Boost d’engagement social conforme aux règles plateformes, validation en un clic.",
+    icon: Layers,
+    bullets: [
+      "Basic : IG/FB, 400 interactions qualifiées/mois",
+      "Pro : IG/FB/LinkedIn, 1500 interactions + leads suivis",
+      "Actions limitées aux likes, follows & commentaires validés"
+    ]
+  }
+];
+
+const adminModules: { title: string; description: string; icon: IconType; bullets: string[] }[] = [
+  {
+    title: "Intégrations clés",
+    description: "Connecteurs Stripe, n8n, Postiz, WordPress, Replicate et Fal.ai en quelques minutes.",
+    icon: Puzzle,
+    bullets: [
+      "Connexion guidée + test de clé/API", 
+      "Suivi de santé des webhooks et tokens chiffrés",
+      "Logs détaillés pour chaque connecteur"
+    ]
+  },
+  {
+    title: "Sandbox & QA",
+    description: "Mode Test pour valider l’infrastructure avant le go-live.",
+    icon: FlaskConical,
+    bullets: [
+      "Contenus fictifs (articles/images/vidéos) générés automatiquement",
+      "Simulation de publication côté Postiz (brouillons seulement)",
+      "Stripe en test mode avec paiements fictifs"
+    ]
+  },
+  {
+    title: "Offres & quotas",
+    description: "Pilotez plans Essential/Starter/Pro et add-ons en toute clarté.",
+    icon: GaugeCircle,
+    bullets: [
+      "Quotas contenus/assets paramétrables par tenant",
+      "Add-ons Fynk, Ambassadeurs et exclusivités activables",
+      "Historique de consommation & alertes de dépassement"
+    ]
+  },
+  {
+    title: "Supervision",
+    description: "Vue globale de vos clients, workflows et incidents.",
+    icon: Radar,
+    bullets: [
+      "Tenants, plans et contenus accessibles en un coup d’œil",
+      "Audit log : actions, erreurs, automatisations",
+      "Monitoring temps réel des workflows n8n"
+    ]
+  },
+  {
+    title: "CRM & email",
+    description: "Segmentez, tagguez et automatisez vos communications.",
+    icon: Users,
+    bullets: [
+      "Historique client complet + tags personnalisés",
+      "Campagnes produit, upsell et support via SendGrid/Postmark",
+      "Affiliation 10 % (15 % après 20 clients) suivie automatiquement"
+    ]
+  },
+  {
+    title: "Support & mémoire tonale",
+    description: "Centralisez tickets Alfie, incidents et préférences de marque.",
+    icon: Headset,
+    bullets: [
+      "Tickets créés depuis le chat Alfie avec contexte",
+      "Gestion incidents + statut partagé avec les clients",
+      "Mémoire tonale accessible pour ajustements rapides"
+    ]
+  },
+  {
+    title: "Roadmap interne",
+    description: "Synchronisée avec le module feedback côté client.",
+    icon: Kanban,
+    bullets: [
+      "Suggestion clients + votes consolidés",
+      "Statuts : acceptée, en cours, livrée",
+      "Publication instantanée dans la roadmap publique"
+    ]
+  }
+];
+
+const stackOverview: { title: string; icon: IconType; items: string[] }[] = [
+  {
+    title: "Stack technique",
+    icon: Layers,
+    items: [
+      "Front : Bolt (React + Tailwind) déployé sur Netlify",
+      "Back & DB : Supabase (auth, stockage, fonctions)",
+      "Orchestration : n8n + workers dédiés",
+      "IA Texte : OpenAI, Médias : Replicate & Fal.ai",
+      "Publication : Postiz multi-réseaux + WordPress",
+      "Billing : Stripe Billing, Email : SendGrid/Postmark"
+    ]
+  },
+  {
+    title: "Données clés",
+    icon: Database,
+    items: [
+      "Tables feedback (id, tenant_id, title, description, votes, status)",
+      "Tables tests (id, type, status, result) pour le mode QA",
+      "Stockage sécurisé des tokens & brand kits",
+      "Logs workflow & audit chiffrés",
+      "Exports KPI disponibles en CSV, PDF, PowerPoint"
+    ]
+  }
+];
+
+const weekRoadmap: { day: string; focus: string; details: string }[] = [
+  { day: "Jour 1", focus: "Auth multi-rôle + Stripe", details: "Connexion clients/admin, test du toggle annuel (-10 %)" },
+  { day: "Jour 2", focus: "n8n + Postiz", details: "Workflows génération + publication connectés" },
+  { day: "Jour 3", focus: "Dashboard client", details: "Plan éditorial, calendrier & KPI accessibles" },
+  { day: "Jour 4", focus: "Dashboard admin", details: "Tenants, intégrations & sandbox Stripe/n8n" },
+  { day: "Jour 5", focus: "Affiliation", details: "Gestion des pourcentages 10 % / 15 % et tracking" },
+  { day: "Jour 6", focus: "Notifications & exports", details: "Multicanal + exports CSV/PDF/PPT" },
+  { day: "Jour 7", focus: "Roadmap + Feedback + QA", details: "Module public, votes et sandbox de tests" }
+];
+
+const nonFunctional: string[] = [
+  "Sandbox complet : contenus fictifs + Stripe test + publication simulée",
+  "Performance mobile : LCP < 2,5 s grâce au rendu optimisé",
+  "Sécurité RGPD : tokens chiffrés, consentements stockés",
+  "Monitoring & alerting des workflows n8n",
+  "Backups réguliers Supabase + supervision uptime"
+];
+
 // Dev-time sanity checks (non-blocking)
 if (typeof window !== "undefined") {
   try {
@@ -81,7 +321,9 @@ if (typeof window !== "undefined") {
       calc.annual(79) === Math.round(79 * 12 * 0.9 * 100) / 100,
       "Annual -10% should match formula"
     );
-  } catch {}
+  } catch {
+    /* noop */
+  }
 }
 
 export default function AeditusLanding() {
@@ -159,7 +401,7 @@ export default function AeditusLanding() {
               Æditus — Plan éditorial mensuel & calendrier de publication
             </motion.h1>
             <motion.p variants={fadeUp} initial="hidden" whileInView="show" custom={2} viewport={{ once: true }} className={`${sub} mt-4`}>
-              Plan éditorial complet chaque mois. Publications hebdomadaires sur tous vos réseaux, en 2 clics — gain : +10 h de travail/mois. Vidéos & visuels inclus. Option : tout en automatique (réversible).
+              Plan éditorial complet chaque mois. Publications hebdomadaires sur tous vos réseaux, en 2 clics — gain : +10 h de travail/mois. Vidéos & visuels inclus. Option : tout en automatique (réversible).
             </motion.p>
             <motion.div variants={fadeUp} initial="hidden" whileInView="show" custom={3} viewport={{ once: true }} className="mt-8 flex flex-wrap items-center gap-3">
               <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-[#0B1110] shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
@@ -233,7 +475,10 @@ export default function AeditusLanding() {
       <section id="about" className="border-b border-white/5">
         <div className={`${container} py-16 md:py-20`}>
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Ce que fait Æditus</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>Un <strong>plan éditorial complet chaque mois</strong> + <strong>publication hebdomadaire</strong> sur vos réseaux, avec votre voix de marque. Validation en 2 clics ou <strong>mode automatique</strong> (réversible). Vidéos & visuels inclus.</p>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Un <strong>plan éditorial complet chaque mois</strong> + <strong>publication hebdomadaire</strong> sur vos réseaux, avec votre voix de marque.
+            Validation en 2 clics ou <strong>mode automatique</strong> (réversible). Visuels, vidéos et déclinaisons inclus, SEO prêt pour les AI Overviews.
+          </p>
           <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <h3 className="font-heading text-white">Plan éditorial</h3>
@@ -278,12 +523,93 @@ export default function AeditusLanding() {
         </div>
       </section>
 
+      {/* Parcours utilisateur */}
+      <section id="semaine-type" className="border-b border-white/5 bg-[#0E1514]">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Parcours utilisateur</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            De l’onboarding au suivi des KPI, tout est pensé pour que vous validiez ou remplaciez un contenu en moins de deux clics,
+            tout en gardant la main sur la roadmap produit.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {journeySteps.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <motion.div
+                  key={step.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  custom={index}
+                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-wide text-white/70">
+                    {step.tag}
+                  </span>
+                  <div className="mt-4 flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="font-heading text-lg text-white">{step.title}</h3>
+                  </div>
+                  <p className="mt-3 text-sm text-white/70">{step.description}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Fonctionnalités principales */}
+      <section id="features" className="border-b border-white/5">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Fonctionnalités principales</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Une plateforme SaaS éditoriale complète qui génère, planifie, publie, mesure et améliore en continu.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {featureBlocks.map((feature, index) => {
+              const Icon = feature.icon;
+              return (
+                <motion.div
+                  key={feature.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  custom={index}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="font-heading text-lg text-white">{feature.title}</h3>
+                      <p className="text-sm text-white/70">{feature.description}</p>
+                    </div>
+                  </div>
+                  <ul className="mt-4 space-y-2 text-sm text-white/80">
+                    {feature.bullets.map((bullet, bulletIndex) => (
+                      <li key={bulletIndex} className="inline-flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Offres */}
       <section id="offres">
         <div className={`${container} py-16 md:py-20`}>
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Offres & besoins</motion.h2>
           <motion.p variants={fadeUp} initial="hidden" whileInView="show" custom={1} viewport={{ once: true }} className={`${sub} mt-2 max-w-2xl`}>
-            Règles claires : 1 marque/abo · annulation à tout moment · essai 7 jours pour Starter & Pro.
+            Règles claires : 1 marque/abo · annulation à tout moment · essai 7 jours pour Starter & Pro.
           </motion.p>
 
           {/* Toggle mensuel/annuel */}
@@ -310,12 +636,12 @@ export default function AeditusLanding() {
               period={billing === "mensuel" ? "/mois" : "/an"}
               discountNote={billing === "annuel" ? "–10% vs mensuel" : undefined}
               points={[
-                "1 idée/mois · 12 posts (1 réseau)",
-                "4 shorts · 1 cover",
-                "KPI lite",
-                "Affiliation 10% incluse",
-                "Pour : solo‑preneurs (présence minimale)",
-                "Sans article, sans carrousel/stories"
+                "1 réseau social au choix (12 posts/mois)",
+                "1 visuel ou vidéo / semaine",
+                "Bibliothèque tonale + briefs illimités",
+                "KPI Lite (impressions + abonnés)",
+                "Affiliation 10% (15% après 20 clients)",
+                "Option : articles & Fynk activables"
               ]}
               cta="Choisir Essential"
               highlight={false}
@@ -329,12 +655,12 @@ export default function AeditusLanding() {
               strike={billing === "mensuel" ? euro(prices.starter.monthly) : undefined}
               discountNote={billing === "mensuel" ? "puis 179€/mois" : "–10% vs mensuel"}
               points={[
-                "2 idées/mois · 2 articles (1200–1500)",
-                "14–16 posts (2–3 réseaux)",
-                "6 vidéos (1 HÉRO + 5 snacks)",
-                "1–2 carrousels, 2 stories, KPI",
-                "Essai 7 jours gratuit (sans publication)",
-                "Affiliation 10% incluse"
+                "Plan éditorial complet (4 réseaux)",
+                "1 vidéo HÉRO + 10 courts/mois",
+                "2 articles SEO 1 200–1 500 mots",
+                "Carrousels + stories + visuels dédiés",
+                "KPI complet + Alfie Copilot",
+                "Essai 7 jours (sans publication)"
               ]}
               cta="Choisir Starter"
               highlight={false}
@@ -348,18 +674,18 @@ export default function AeditusLanding() {
               strike={billing === "mensuel" ? euro(prices.pro.monthly) : undefined}
               discountNote={billing === "mensuel" ? "puis 399€/mois" : "–10% vs mensuel"}
               points={[
-                "4 idées/mois (hebdo) · 4 articles (1500–2000)",
-                "28–36 posts (3–4 réseaux)",
-                "12–14 vidéos (4 HÉRO + 8–10 snacks)",
-                "Carrousels + stories, KPI & recalibrage",
-                "Essai 7 jours gratuit (sans publication)",
-                "Affiliation 10% incluse"
+                "Présence totale : jusqu’à 7 réseaux",
+                "3–4 vidéos HÉRO + courts illimités",
+                "4 articles SEO 1 500–2 000 mots",
+                "Bilans hebdo + recalibrage automatique",
+                "Accès prioritaire aux nouveautés",
+                "Essai 7 jours (sans publication)"
               ]}
               cta="Choisir Pro"
               highlight
             />
           </div>
-          <div className="mt-2 text-center text-xs text-white/60">Affiliation : 10 % sur toutes les offres et sur Fynk.</div>
+          <div className="mt-2 text-center text-xs text-white/60">Affiliation : 10 % (15 % après 20 clients) sur toutes les offres et sur Fynk.</div>
 
           {/* Add-ons moved below (Fynk section) */}
         </div>
@@ -371,7 +697,10 @@ export default function AeditusLanding() {
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>
             Encore plus de visibilité avec Fynk
           </motion.h2>
-          <p className={`${sub} mt-2 max-w-2xl`}>Complément d’engagement : réponses/commentaires pertinents proposés, <strong>validation en 1 clic</strong>. Jamais de spam. Règles plateformes respectées.</p>
+          <p className={`${sub} mt-2 max-w-2xl`}>
+            Add-on d’engagement social : likes, follows et commentaires validés pour amplifier vos contenus. Suggestions prêtes à l’emploi,
+            <strong> validation en 1 clic</strong> et respect strict des règles plateformes.
+          </p>
 
           {/* Stats */}
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
@@ -406,26 +735,26 @@ export default function AeditusLanding() {
           <div id="fynk-offres" className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
             <AddOnCard
               title="Fynk Basic — 29€ /mois"
-              price="IG/FB"
+              price="IG + Facebook"
               variant="basic"
               points={[
-                "Jusqu’à 80 commentaires pertinents/mois",
-                "Suggestions de réponses quotidiennes (jusqu’à 20/jour)",
-                "Validation en 1 clic",
-                "Jamais de spam, respect des règles plateformes"
+                "Jusqu’à 400 interactions qualifiées/mois",
+                "Likes, follows & commentaires validés",
+                "Suggestions quotidiennes avec planning",
+                "Validation en 1 clic, respect des règles"
               ]}
               note="1 marque/abo · annulation à tout moment"
               cta="Choisir Fynk Basic"
             />
             <AddOnCard
               title="Fynk Pro — 69€ /mois"
-              price="IG/FB/LinkedIn"
+              price="IG + Facebook + LinkedIn"
               variant="pro"
               points={[
-                "Jusqu’à 240 commentaires pertinents/mois",
-                "Priorisation des leads & relances",
+                "Jusqu’à 1 500 interactions qualifiées/mois",
+                "Détection de leads & relances priorisées",
                 "Routines avancées (prospection douce)",
-                "Validation en 1 clic · reporting d’impact"
+                "Reporting d’impact & exports"
               ]}
               note="1 marque/abo · annulation à tout moment"
               cta="Choisir Fynk Pro"
@@ -442,13 +771,56 @@ export default function AeditusLanding() {
                   <li>Actif sur au moins 2 réseaux, sélection sur dossier</li>
                   <li><strong>4 posts/semaine automatiques</strong> inclus dans votre plan éditorial</li>
                   <li>Avis/témoignage + feedback mensuel</li>
-                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
+                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
                 </ul>
               </div>
               <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60">
                 Devenir Ambassadeur <ChevronRight className="h-4 w-4" />
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Plateforme admin */}
+      <section id="admin" className="border-t border-white/5">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Plateforme admin</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Supervisez vos intégrations, quotas et clients avec une vue unifiée, du sandbox à la roadmap interne.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {adminModules.map((module, index) => {
+              const Icon = module.icon;
+              return (
+                <motion.div
+                  key={module.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  custom={index}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-cyan-500/20 text-cyan-200">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <div>
+                      <h3 className="font-heading text-lg text-white">{module.title}</h3>
+                      <p className="text-sm text-white/70">{module.description}</p>
+                    </div>
+                  </div>
+                  <ul className="mt-4 space-y-2 text-sm text-white/80">
+                    {module.bullets.map((bullet, bulletIndex) => (
+                      <li key={bulletIndex} className="inline-flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -467,7 +839,7 @@ export default function AeditusLanding() {
                   <li>Actif sur au moins 2 réseaux, sélection sur dossier</li>
                   <li><strong>4 posts/semaine automatiques</strong> inclus dans votre plan éditorial</li>
                   <li>Avis/témoignage + feedback mensuel</li>
-                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
+                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
                 </ul>
               </div>
               <a href="#" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60">
@@ -482,7 +854,7 @@ export default function AeditusLanding() {
       <section id="compare" className="border-t border-white/5 bg-[#0E1514]">
         <div className={`${container} py-16 md:py-20`}>
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Æditus vs concurrents</motion.h2>
-        	<p className={`${sub} mt-2 max-w-3xl`}>Pas qu’un scheduler : une chaîne complète de génération + orchestration + publication, avec voix de marque conservée.</p>
+        	<p className={`${sub} mt-2 max-w-3xl`}>Pas qu’un scheduler : une chaîne complète de génération + orchestration + publication, avec voix de marque conservée.</p>
 
           <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10">
             <table className="w-full min-w-[1080px] border-collapse text-sm" data-testid="compare-table">
@@ -521,11 +893,107 @@ export default function AeditusLanding() {
         </div>
       </section>
 
+      {/* Stack & données */}
+      <section id="stack" className="border-t border-white/5 bg-[#0E1514]">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Stack & données</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Une architecture moderne prête pour l’automatisation et la scalabilité, avec stockage sécurisé des informations sensibles.
+          </p>
+          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
+            {stackOverview.map((stack, index) => {
+              const Icon = stack.icon;
+              return (
+                <motion.div
+                  key={stack.title}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="show"
+                  viewport={{ once: true }}
+                  custom={index}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="font-heading text-lg text-white">{stack.title}</h3>
+                  </div>
+                  <ul className="mt-4 space-y-2 text-sm text-white/80">
+                    {stack.items.map((item, itemIndex) => (
+                      <li key={itemIndex} className="inline-flex items-start gap-2">
+                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {item}
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Roadmap 7 jours */}
+      <section id="roadmap" className="border-t border-white/5">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Roadmap 7 jours</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Lancement prioritaire sur les fondamentaux : authentification, génération, publication et boucle de feedback.
+          </p>
+          <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
+            <table className="w-full min-w-[720px] border-collapse text-sm">
+              <thead className="bg-white/5 text-left text-white/70">
+                <tr>
+                  <th className="px-4 py-3 font-medium">Jour</th>
+                  <th className="px-4 py-3 font-medium">Focus</th>
+                  <th className="px-4 py-3 font-medium">Détails</th>
+                </tr>
+              </thead>
+              <tbody>
+                {weekRoadmap.map((item, index) => (
+                  <tr key={item.day} className={index % 2 ? "bg-white/0" : "bg-white/5"}>
+                    <td className="px-4 py-3 text-white/80">{item.day}</td>
+                    <td className="px-4 py-3 text-white">{item.focus}</td>
+                    <td className="px-4 py-3 text-white/70">{item.details}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {/* Exigences non-fonctionnelles */}
+      <section id="non-functional" className="border-t border-white/5 bg-[#0E1514]">
+        <div className={`${container} py-16 md:py-20`}>
+          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Exigences non-fonctionnelles</motion.h2>
+          <p className={`${sub} mt-2 max-w-3xl`}>
+            Fiabilité, performance et conformité dès le premier jour grâce à un cadre de test complet.
+          </p>
+          <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
+            {nonFunctional.map((item, index) => (
+              <motion.li
+                key={item}
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                custom={index}
+                className="inline-flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/80"
+              >
+                <ShieldCheck className="mt-0.5 h-5 w-5 text-indigo-300" />
+                <span>{item}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
       {/* FAQ */}
       <section id="faq">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
           <div className="mb-8 rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-400/10 to-cyan-400/10 p-6 text-center">
-            <h3 className="font-heading text-xl text-white">Prêt à installer votre présence régulière ?</h3>
+            <h3 className="font-heading text-xl text-white">Prêt à installer votre présence régulière ?</h3>
             <p className="mt-1 text-sm text-white/70">Démarrez l’essai 7 jours (sans publication) ou choisissez une offre.</p>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
               <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
@@ -541,10 +1009,10 @@ export default function AeditusLanding() {
           <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>FAQ</motion.h2>
           <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/5">
             {[
-              { q: "Puis‑je valider avant publication ?", a: "Oui. Validation ultra‑light (OK / Éditer / Remplacer). Aucune publication surprise." },
-              { q: "Quelles plateformes sont supportées ?", a: "Publication sur 20+ réseaux (selon forfait)." },
-              { q: "Et ma voix de marque ?", a: "Votre voix et votre personnalité sont apprises et respectées dans chaque contenu." },
-              { q: "Fynk, à quoi ça sert ?", a: "Fynk déclenche des interactions utiles (likes/commentaires ciblés) pour augmenter la portée de vos posts et générer des conversations. Résultat : plus de vues, plus de réponses et davantage de RDV/Leads." }
+              { q: "Puis‑je valider avant publication ?", a: "Oui. Validation ultra‑light (OK / Éditer / Remplacer). Aucune publication surprise." },
+              { q: "Quelles plateformes sont supportées ?", a: "Publication sur 20+ réseaux (selon forfait)." },
+              { q: "Et ma voix de marque ?", a: "Votre voix et votre personnalité sont apprises et respectées dans chaque contenu." },
+              { q: "Fynk, à quoi ça sert ?", a: "Fynk déclenche des interactions utiles (likes/commentaires ciblés) pour augmenter la portée de vos posts et générer des conversations. Résultat : plus de vues, plus de réponses et davantage de RDV/Leads." }
             ].map((f, i) => (
               <details key={i} className="group open:bg-white/5">
                 <summary className="flex cursor-pointer list-none items-start justify-between gap-6 px-6 py-5 text-left font-medium text-white/90">
