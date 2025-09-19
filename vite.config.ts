@@ -15,9 +15,4 @@ export default defineConfig({
       "react-router-dom": fileURLToPath(new URL("./src/lib/router.tsx", import.meta.url)),
     },
   },
-  test: {
-    environment: "jsdom",
-    setupFiles: "./tests/setup.ts",
-    css: true,
-  },
 });
