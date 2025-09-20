@@ -63,6 +63,17 @@ const sub = "text-base md:text-lg text-white/70";
 const pill =
   "inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-indigo-200 text-xs font-medium";
 
+const bubblePositions = [
+  { left: "5%", top: "18%", delay: 0.2, duration: 12 },
+  { left: "18%", top: "70%", delay: 0.8, duration: 14 },
+  { left: "32%", top: "42%", delay: 1.4, duration: 11 },
+  { left: "46%", top: "10%", delay: 0.6, duration: 15 },
+  { left: "60%", top: "55%", delay: 0.3, duration: 13 },
+  { left: "74%", top: "24%", delay: 1.1, duration: 12 },
+  { left: "82%", top: "68%", delay: 0.5, duration: 16 },
+  { left: "12%", top: "88%", delay: 1.2, duration: 10 },
+];
+
 // Helpers
 const euro = (n: number) =>
   new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(n);
@@ -213,6 +224,20 @@ export default function AeditusLanding() {
     []
   );
 
+  const handleAuditRequest = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = (formData.get("email") as string) ?? "";
+    const site = (formData.get("site") as string) ?? "";
+    const objectif = (formData.get("objectif") as string) ?? "";
+    const subject = encodeURIComponent("Audit éditorial Æditus");
+    const body = encodeURIComponent(`Email : ${email}\nSite : ${site}\nObjectif : ${objectif}`);
+    if (typeof window !== "undefined") {
+      window.open(`mailto:hello@aeditus.com?subject=${subject}&body=${body}`, "_blank");
+    }
+    event.currentTarget.reset();
+  };
+
   return (
     <div className="min-h-screen scroll-smooth bg-[#0B1110] text-white [--ring:#6366F1]">
       {/* Background FX */}
@@ -223,14 +248,14 @@ export default function AeditusLanding() {
         <motion.div className="absolute left-[-12rem] bottom-[-14rem] h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/20 blur-[120px]" {...float(1.2)} />
 
         {/* tiny bubbles */}
-        {Array.from({ length: 14 }).map((_, i) => (
+        {bubblePositions.map((bubble, index) => (
           <motion.div
-            key={i}
+            key={`${bubble.left}-${bubble.top}-${index}`}
             className="absolute h-2 w-2 rounded-full bg-white/10"
-            style={{ left: (Math.random() * 100) + '%', top: (Math.random() * 100) + '%' }}
+            style={{ left: bubble.left, top: bubble.top }}
             initial={{ y: 0, opacity: 0.2, scale: 0.8 }}
             animate={{ y: [0, -12, 0, 10, 0], opacity: [0.2, 0.45, 0.25, 0.4, 0.2], scale: [0.8, 1, 0.9, 1.05, 0.8] }}
-            transition={{ duration: 12 + Math.random() * 6, delay: Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
+            transition={{ duration: bubble.duration, delay: bubble.delay, repeat: Infinity, ease: "easeInOut" }}
           />
         ))}
       </div>
@@ -422,6 +447,72 @@ export default function AeditusLanding() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Audit éditorial CTA */}
+      <section className="border-b border-white/5 bg-white/5">
+        <div className={`${container} grid gap-10 py-16 md:grid-cols-2 md:py-20`}>
+          <div>
+            <motion.h2
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+              className={h2}
+            >
+              Audit éditorial offert
+            </motion.h2>
+            <p className={`${sub} mt-3`}>
+              Analyse rapide de votre présence actuelle, recommandations de formats et proposition de calendrier
+              priorisé pour les 30 prochains jours.
+            </p>
+            <ul className="mt-4 space-y-2 text-sm text-white/70">
+              <li>✔️ Benchmark rapide de vos concurrents directs</li>
+              <li>✔️ 3 angles de sujets exclusifs validés par Alfie</li>
+              <li>✔️ Projection des quotas et charge interne associée</li>
+            </ul>
+          </div>
+          <form onSubmit={handleAuditRequest} className="rounded-2xl border border-white/10 bg-[#0E1514] p-6 space-y-4 text-sm">
+            <div>
+              <label className="text-sm font-medium text-white">Votre email professionnel</label>
+              <input
+                required
+                type="email"
+                name="email"
+                className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                placeholder="prenom@entreprise.com"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-white">Site / profil principal</label>
+              <input
+                required
+                type="url"
+                name="site"
+                className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                placeholder="https://..."
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-white">Objectif prioritaire</label>
+              <textarea
+                name="objectif"
+                rows={3}
+                className="mt-2 w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-white placeholder:text-white/40 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+                placeholder="Ex : Générer 20 RDV qualifiés / trimestre via LinkedIn"
+              />
+            </div>
+            <button
+              type="submit"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+            >
+              Recevoir mon audit en 48h
+            </button>
+            <p className="text-xs text-white/40">
+              Nous revenons vers vous sous 48h ouvrées. Aucun spam, aucune obligation d'achat.
+            </p>
+          </form>
         </div>
       </section>
 
