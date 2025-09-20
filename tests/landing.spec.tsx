@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
+
 import { MemoryRouter } from 'react-router-dom';
 
 import NewLandingPage, { calc } from '@/components/landing/NewLandingPage';
 
 describe('NewLandingPage', () => {
-  it('affiche le hero et oriente les CTA vers les offres', () => {
+  it('affiche le hero, la navigation courte et les CTA auth', () => {
     render(
       <MemoryRouter>
         <NewLandingPage />
@@ -13,17 +14,18 @@ describe('NewLandingPage', () => {
     );
 
     expect(
-      screen.getByText(/plan éditorial mensuel & calendrier de publication/i),
+      screen.getByText(/plan éditorial complet & contenus prêts à publier/i),
     ).toBeInTheDocument();
 
-    const ctas = screen.getAllByRole('link', { name: /Démarrer l’essai 7 jours/i });
-    expect(ctas).not.toHaveLength(0);
-    ctas.forEach((cta) => {
-      expect(cta).toHaveAttribute('href', '#offres');
-    });
+    const nav = screen.getByRole('navigation');
+    const navLinks = within(nav).getAllByRole('link');
+    expect(navLinks.map((link) => link.textContent?.trim())).toEqual(['Æditus', 'Gains', 'Tarifs']);
 
-    expect(screen.getByRole('link', { name: /Explorer la plateforme/i })).toHaveAttribute('href', '/app/client');
-    expect(screen.getByRole('link', { name: /Voir la plateforme/i })).toHaveAttribute('href', '/app/client');
+    expect(screen.getByRole('link', { name: /Démarrer l’essai 7 jours/i })).toHaveAttribute('href', '/auth/signup');
+    expect(screen.getByRole('link', { name: /Auth sécurisée/i })).toHaveAttribute('href', '/auth/signin');
+    expect(screen.getByRole('link', { name: /Se connecter à la plateforme/i })).toHaveAttribute('href', '/auth/signin');
+    expect(screen.getByRole('link', { name: /S’inscrire/i })).toHaveAttribute('href', '/auth/signup');
+    expect(screen.getByText('+48 %')).toBeInTheDocument();
   });
 
   it('bascule vers la tarification annuelle', () => {
@@ -33,7 +35,7 @@ describe('NewLandingPage', () => {
       </MemoryRouter>
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Annuel' }));
+    fireEvent.click(screen.getByRole('button', { name: /Basculer la tarification/i }));
 
     expect(screen.getByTestId('price-pro')).toHaveTextContent('–10% vs mensuel');
   });

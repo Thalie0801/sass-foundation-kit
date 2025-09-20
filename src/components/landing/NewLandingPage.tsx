@@ -1,1270 +1,430 @@
 /* eslint-disable react-refresh/only-export-components */
-import React, { useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import {
-  Sparkles,
-  Calendar,
-  PenLine,
-  Video,
-  BarChart3,
-  ShieldCheck,
-  ChevronRight,
-  Check,
-  ArrowRightLeft,
-  MousePointerClick,
-  BadgeCheck,
-  Send,
-  MessageSquare,
-  Bot,
-  Lightbulb,
-  Puzzle,
-  FlaskConical,
-  GaugeCircle,
-  Radar,
-  Users,
-  Headset,
-  Kanban,
-  Layers,
-  Database
-} from "lucide-react";
+"use client";
 
-/**
- * Æditus — Landing (friendly, mobile-first, accents OK)
- * ----------------------------------------------------
- * Stack: React + Tailwind + Framer Motion + Lucide
- * Brand (friendly): Indigo/Cyan gradient (#6366F1 → #06B6D4) + warm accent (#F59E0B)
- * Messaging: Visibilité & Authenticité. Pas de mention de paiement récurrent.
- * Vidéos intégrées (Spark supprimé). Ne pas mentionner Postiz/WordPress.
- * Publication 20+ réseaux. Calendrier : drag & drop ou automatique.
- * CTA: Démo et Offres.
- */
+import { useState } from "react";
 
-// Animations
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.08 * i, duration: 0.6, ease: [0.22, 1, 0.36, 1] }
-  })
+type Plan = {
+  name: string;
+  monthly: number;
+  badge?: string;
+  features: string[];
 };
 
-const float = (delay = 0) => ({
-  initial: { y: 0, opacity: 0.75 },
-  animate: {
-    y: [0, -24, 0, 18, 0],
-    opacity: [0.75, 0.95, 0.8, 0.9, 0.75],
-    transition: { duration: 9.5, delay, repeat: Infinity, ease: "easeInOut" }
+type Feature = {
+  title: string;
+  description: string;
+  points: string[];
+};
+
+type Gain = {
+  stat: string;
+  label: string;
+  detail: string;
+};
+
+type Addon = {
+  name: string;
+  price: string;
+  bullets: string[];
+};
+
+const navigation = [
+  { label: "Æditus", href: "#aeditus" },
+  { label: "Gains", href: "#gains" },
+  { label: "Tarifs", href: "#pricing" }
+];
+
+const plans: Plan[] = [
+  {
+    name: "Essential",
+    monthly: 79,
+    features: [
+      "Mini-plan éditorial validé par Alfie",
+      "Publication hebdomadaire sur 1 réseau",
+      "1 visuel animé ou vidéo snack / semaine",
+      "Bilan mensuel + recommandations rapides",
+      "Copilot + calendrier collaboratif",
+      "Affiliation partenaires 10 %"
+    ]
+  },
+  {
+    name: "Starter",
+    monthly: 179,
+    badge: "134,25€ 1er mois (–25%)",
+    features: [
+      "Plan éditorial complet multi-personas",
+      "2 articles SEO + déclinaisons sociales",
+      "Publication hebdo sur 4 réseaux",
+      "1 vidéo HÉRO + 8 formats courts/mois",
+      "Ajustements rapides & support prioritaire",
+      "Copilot, calendrier & reporting avancé"
+    ]
+  },
+  {
+    name: "Pro",
+    monthly: 399,
+    badge: "299,25€ 1er mois (–25%)",
+    features: [
+      "Stratégie éditoriale complète par segment",
+      "Publication hebdomadaire sur 7 réseaux",
+      "3–4 vidéos HÉRO + 12 formats courts/mois",
+      "Optimisation continue & bilan hebdomadaire",
+      "Copilot, DAM & workflows approuvés",
+      "Affiliation 15 % dès 20 clients"
+    ]
   }
-});
+];
 
-const haloPulse = {
-  initial: { scale: 0.9, opacity: 0.25 },
-  animate: { scale: [0.9, 1.05, 0.95, 1.1, 0.9], opacity: [0.2, 0.35, 0.25, 0.3, 0.2] },
-  transition: { duration: 10, repeat: Infinity, ease: "easeInOut" }
-};
+const aeditusFeatures: Feature[] = [
+  {
+    title: "Plan éditorial piloté par les données",
+    description: "Saisons business, signaux SEO et tendance sociale intégrés pour chaque marque.",
+    points: [
+      "Angles, hooks et CTA alignés à vos objectifs",
+      "Calendrier lisible + drag & drop ou mode auto",
+      "Briefs validés par vos équipes en 2 clics"
+    ]
+  },
+  {
+    title: "Studio média intégré",
+    description: "Scripts, visuels et vidéos produits par Alfie + l’équipe créa, prêts à publier.",
+    points: [
+      "Exports multi-formats (1:1, 9:16, carrousel)",
+      "Bibliothèque de médias approuvés",
+      "Collaboration instantanée avec mentions"
+    ]
+  },
+  {
+    title: "Distribution multicanal fiable",
+    description: "Jusqu’à 20 réseaux connectés avec suivi des quotas et reprise automatique.",
+    points: [
+      "Heatmap des meilleurs créneaux",
+      "File d’attente sécurisée & retries",
+      "Alertes proactives sur les anomalies"
+    ]
+  },
+  {
+    title: "Pilotage KPI & Copilot",
+    description: "Tableaux de bord clairs et recommandations actionnables sur ce qui performe.",
+    points: [
+      "Visibilité des impressions, clics et leads",
+      "Insights automatiques envoyés chaque semaine",
+      "Copilot IA + humain disponible 7j/7"
+    ]
+  }
+];
 
-// UI tokens
-const container = "mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8";
-const h1 = "font-heading text-3xl sm:text-4xl md:text-5xl leading-tight tracking-tight text-white";
-const h2 = "font-heading text-2xl md:text-3xl tracking-tight text-white";
-const sub = "text-base md:text-lg text-white/70";
-const pill =
-  "inline-flex items-center gap-2 rounded-full border border-indigo-400/30 bg-indigo-400/10 px-3 py-1 text-indigo-200 text-xs font-medium";
+const gains: Gain[] = [
+  {
+    stat: "+12 h/mois",
+    label: "de coordination gagnées",
+    detail: "Production + validation centralisées"
+  },
+  {
+    stat: "+48 %",
+    label: "de visibilité en moyenne",
+    detail: "Sur 90 jours avec plan et vidéos intégrés"
+  },
+  {
+    stat: "x3",
+    label: "conversations qualifiées",
+    detail: "RDV pris via contenus evergreen"
+  }
+];
 
-// Helpers
-const euro = (n: number) =>
-  new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 2 }).format(n);
+const fynkAddons: Addon[] = [
+  {
+    name: "Fynk Basic",
+    price: "29€/mois",
+    bullets: ["Jusqu’à 400 interactions/mois", "Instagram + Facebook", "Suggestions quotidiennes validées"]
+  },
+  {
+    name: "Fynk Pro",
+    price: "69€/mois",
+    bullets: [
+      "Jusqu’à 1500 interactions/mois",
+      "Instagram + Facebook + LinkedIn",
+      "Détection de leads + reporting détaillé"
+    ]
+  }
+];
 
-// Pricing helpers (exported for tests)
+const perMonth = (monthly: number) => (monthly * 0.9).toFixed(2).replace(".", ",");
+const yearlyTotal = (monthly: number) => (monthly * 12 * 0.9).toFixed(2).replace(".", ",");
+const price = (monthly: number, annual: boolean) => (annual ? perMonth(monthly) : monthly.toString());
+
 export const calc = {
   discountedFirstMonth(base: number) {
-    return Math.round(base * 0.75 * 100) / 100; // 25% off
+    return Math.round(base * 0.75 * 100) / 100;
   },
   annual(base: number, discount = 0.1) {
-    return Math.round(base * 12 * (1 - discount) * 100) / 100; // 10% off by default
+    return Math.round(base * 12 * (1 - discount) * 100) / 100;
   }
 };
 
-type IconType = React.ElementType;
-
-const journeySteps: { title: string; description: string; icon: IconType; tag: string }[] = [
-  {
-    title: "Onboarding express",
-    description: "Formulaire niche, objectifs et brand kit importé en 5 min. Alfie apprend votre ton immédiatement.",
-    icon: PenLine,
-    tag: "Jour 0"
-  },
-  {
-    title: "Plan éditorial généré",
-    description: "Articles SEO prêts pour les AI Overviews, déclinaisons sociales et médias suggérés.",
-    icon: Sparkles,
-    tag: "Jour 1"
-  },
-  {
-    title: "Calendrier centralisé",
-    description: "Backlog intelligent → slots. Quotas par réseau, heatmap d’opportunités, drag & drop.",
-    icon: Calendar,
-    tag: "Jour 1"
-  },
-  {
-    title: "Validation éclair",
-    description: "OK / Éditer / Remplacer. Mode automatique réversible. Commentaires contextuels accessibles.",
-    icon: MousePointerClick,
-    tag: "Chaque semaine"
-  },
-  {
-    title: "Publication orchestrée",
-    description: "Posts, visuels et vidéos publiés sur 20+ réseaux et blog. File d’attente sécurisée + retries.",
-    icon: Send,
-    tag: "Chaque semaine"
-  },
-  {
-    title: "KPI & Copilot",
-    description: "Dashboard impressions, clics, abonnés. Alfie explique les variations et propose des actions.",
-    icon: BarChart3,
-    tag: "Jour 30"
-  },
-  {
-    title: "Roadmap & feedback",
-    description: "Module intégré pour découvrir les features à venir et voter/suggérer en 2 clics.",
-    icon: MessageSquare,
-    tag: "En continu"
-  }
-];
-
-const featureBlocks: { title: string; description: string; bullets: string[]; icon: IconType }[] = [
-  {
-    title: "Génération & planification",
-    description: "Contenus pensés mobile-first, compatibles AI Overviews et sans chevauchement entre clients.",
-    icon: Sparkles,
-    bullets: [
-      "Replicate & Fal.ai pour visuels/vidéos HÉRO + snacks",
-      "Ajout libre de vos propres contenus et briefs",
-      "Calendrier avec quotas, heatmap et scénarios auto"
-    ]
-  },
-  {
-    title: "Publication automatique",
-    description: "Orchestration fiable pour vos réseaux sociaux et votre blog sans prise de tête.",
-    icon: Send,
-    bullets: [
-      "Jusqu’à 20 réseaux sociaux connectés",
-      "Articles longs exportés et publiables en un clic",
-      "File d’attente, retries et alertes proactives"
-    ]
-  },
-  {
-    title: "KPI & optimisation",
-    description: "Visualisez la performance et itérez rapidement sur les formats gagnants.",
-    icon: BarChart3,
-    bullets: [
-      "Dashboard impressions, engagement, clics, abonnés",
-      "Exports CSV, PDF ou PowerPoint partagés en un clic",
-      "Suggestions Alfie sur titres, formats & timings"
-    ]
-  },
-  {
-    title: "Alfie Copilot",
-    description: "Votre copilote intégré pour créer, comprendre et obtenir du support sans attendre.",
-    icon: Bot,
-    bullets: [
-      "Génération guidée pour articles, scripts, captions",
-      "Explication des KPI et recommandations personnalisées",
-      "Chat Q/R + tickets remontés automatiquement à l’admin"
-    ]
-  },
-  {
-    title: "Roadmap & feedback",
-    description: "Un cycle d’amélioration continue visible par vos clients et votre équipe.",
-    icon: Lightbulb,
-    bullets: [
-      "Roadmap publique : prévu, en test, livré",
-      "Bouton “Suggérer une amélioration” connecté à la base",
-      "Tri par popularité côté admin, statut mis à jour en temps réel"
-    ]
-  },
-  {
-    title: "Add-on Fynk",
-    description: "Boost d’engagement social conforme aux règles plateformes, validation en un clic.",
-    icon: Layers,
-    bullets: [
-      "Basic : IG/FB, 400 interactions qualifiées/mois",
-      "Pro : IG/FB/LinkedIn, 1500 interactions + leads suivis",
-      "Actions limitées aux likes, follows & commentaires validés"
-    ]
-  }
-];
-
-const adminModules: { title: string; description: string; icon: IconType; bullets: string[] }[] = [
-  {
-    title: "Intégrations clés",
-    description:
-      "Connecteurs Stripe, n8n, orchestrateur social, CMS headless, Replicate et Fal.ai en quelques minutes.",
-    icon: Puzzle,
-    bullets: [
-      "Connexion guidée + test de clé/API", 
-      "Suivi de santé des webhooks et tokens chiffrés",
-      "Logs détaillés pour chaque connecteur"
-    ]
-  },
-  {
-    title: "Sandbox & QA",
-    description: "Mode Test pour valider l’infrastructure avant le go-live.",
-    icon: FlaskConical,
-    bullets: [
-      "Contenus fictifs (articles/images/vidéos) générés automatiquement",
-      "Simulation de publication via l’orchestrateur social (brouillons seulement)",
-      "Stripe en test mode avec paiements fictifs"
-    ]
-  },
-  {
-    title: "Offres & quotas",
-    description: "Pilotez plans Essential/Starter/Pro et add-ons en toute clarté.",
-    icon: GaugeCircle,
-    bullets: [
-      "Quotas contenus/assets paramétrables par tenant",
-      "Add-ons Fynk, Ambassadeurs et exclusivités activables",
-      "Historique de consommation & alertes de dépassement"
-    ]
-  },
-  {
-    title: "Supervision",
-    description: "Vue globale de vos clients, workflows et incidents.",
-    icon: Radar,
-    bullets: [
-      "Tenants, plans et contenus accessibles en un coup d’œil",
-      "Audit log : actions, erreurs, automatisations",
-      "Monitoring temps réel des workflows n8n"
-    ]
-  },
-  {
-    title: "CRM & email",
-    description: "Segmentez, tagguez et automatisez vos communications.",
-    icon: Users,
-    bullets: [
-      "Historique client complet + tags personnalisés",
-      "Campagnes produit, upsell et support via SendGrid/Postmark",
-      "Affiliation 10 % (15 % après 20 clients) suivie automatiquement"
-    ]
-  },
-  {
-    title: "Support & mémoire tonale",
-    description: "Centralisez tickets Alfie, incidents et préférences de marque.",
-    icon: Headset,
-    bullets: [
-      "Tickets créés depuis le chat Alfie avec contexte",
-      "Gestion incidents + statut partagé avec les clients",
-      "Mémoire tonale accessible pour ajustements rapides"
-    ]
-  },
-  {
-    title: "Roadmap interne",
-    description: "Synchronisée avec le module feedback côté client.",
-    icon: Kanban,
-    bullets: [
-      "Suggestion clients + votes consolidés",
-      "Statuts : acceptée, en cours, livrée",
-      "Publication instantanée dans la roadmap publique"
-    ]
-  }
-];
-
-const stackOverview: { title: string; icon: IconType; items: string[] }[] = [
-  {
-    title: "Stack technique",
-    icon: Layers,
-    items: [
-      "Front : Bolt (React + Tailwind) déployé sur Netlify",
-      "Back & DB : Supabase (auth, stockage, fonctions)",
-      "Orchestration : n8n + workers dédiés",
-      "IA Texte : OpenAI, Médias : Replicate & Fal.ai",
-      "Publication : orchestrateur multi-réseaux + CMS headless",
-      "Billing : Stripe Billing, Email : SendGrid/Postmark"
-    ]
-  },
-  {
-    title: "Données clés",
-    icon: Database,
-    items: [
-      "Tables feedback (id, tenant_id, title, description, votes, status)",
-      "Tables tests (id, type, status, result) pour le mode QA",
-      "Stockage sécurisé des tokens & brand kits",
-      "Logs workflow & audit chiffrés",
-      "Exports KPI disponibles en CSV, PDF, PowerPoint"
-    ]
-  }
-];
-
-const weekRoadmap: { day: string; focus: string; details: string }[] = [
-  { day: "Jour 1", focus: "Auth multi-rôle + Stripe", details: "Connexion clients/admin, test du toggle annuel (-10 %)" },
-  { day: "Jour 2", focus: "n8n + orchestrateur social", details: "Workflows génération + publication connectés" },
-  { day: "Jour 3", focus: "Dashboard client", details: "Plan éditorial, calendrier & KPI accessibles" },
-  { day: "Jour 4", focus: "Dashboard admin", details: "Tenants, intégrations & sandbox Stripe/n8n" },
-  { day: "Jour 5", focus: "Affiliation", details: "Gestion des pourcentages 10 % / 15 % et tracking" },
-  { day: "Jour 6", focus: "Notifications & exports", details: "Multicanal + exports CSV/PDF/PPT" },
-  { day: "Jour 7", focus: "Roadmap + Feedback + QA", details: "Module public, votes et sandbox de tests" }
-];
-
-const nonFunctional: string[] = [
-  "Sandbox complet : contenus fictifs + Stripe test + publication simulée",
-  "Performance mobile : LCP < 2,5 s grâce au rendu optimisé",
-  "Sécurité RGPD : tokens chiffrés, consentements stockés",
-  "Monitoring & alerting des workflows n8n",
-  "Backups réguliers Supabase + supervision uptime"
-];
-
-// Dev-time sanity checks (non-blocking)
-if (typeof window !== "undefined") {
-  try {
-    console.assert(calc.discountedFirstMonth(179) === 134.25, "Starter -25% should be 134.25");
-    console.assert(calc.discountedFirstMonth(399) === 299.25, "Pro -25% should be 299.25");
-    console.assert(
-      calc.annual(79) === Math.round(79 * 12 * 0.9 * 100) / 100,
-      "Annual -10% should match formula"
-    );
-  } catch {
-    /* noop */
-  }
-}
-
-export default function AeditusLanding() {
-  const [billing, setBilling] = useState<"mensuel" | "annuel">("mensuel");
-
-  const prices = useMemo(
-    () => ({
-      essential: { monthly: 79, annual: calc.annual(79) },
-      starter: { monthly: 179, annual: calc.annual(179) },
-      pro: { monthly: 399, annual: calc.annual(399) }
-    }),
-    []
-  );
+export default function NewLandingPage() {
+  const [annual, setAnnual] = useState(false);
 
   return (
-    <div className="min-h-screen scroll-smooth bg-[#0B1110] text-white [--ring:#6366F1]">
-      {/* Background FX */}
-      <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        {/* soft blobs */}
-        <motion.div className="absolute left-1/2 top-[-12rem] h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-indigo-500/30 blur-[120px]" {...float(0.2)} />
-        <motion.div className="absolute right-[-10rem] bottom-[-8rem] h-[24rem] w-[24rem] rounded-full bg-cyan-500/30 blur-[120px]" {...float(0.6)} />
-        <motion.div className="absolute left-[-12rem] bottom-[-14rem] h-[28rem] w-[28rem] rounded-full bg-fuchsia-500/20 blur-[120px]" {...float(1.2)} />
-
-        {/* tiny bubbles */}
-        {Array.from({ length: 14 }).map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-2 w-2 rounded-full bg-white/10"
-            style={{ left: (Math.random() * 100) + '%', top: (Math.random() * 100) + '%' }}
-            initial={{ y: 0, opacity: 0.2, scale: 0.8 }}
-            animate={{ y: [0, -12, 0, 10, 0], opacity: [0.2, 0.45, 0.25, 0.4, 0.2], scale: [0.8, 1, 0.9, 1.05, 0.8] }}
-            transition={{ duration: 12 + Math.random() * 6, delay: Math.random() * 2, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
-      </div>
-
-      {/* Nav */}
-      <header className="sticky top-0 z-30 border-b border-white/5 backdrop-blur supports-[backdrop-filter]:bg-[#0B1110]/70">
-        <nav className={`${container} flex h-16 items-center justify-between`}>
-          <a href="#top" className="group inline-flex items-center gap-2">
-            <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-indigo-400 to-cyan-500 text-[#0B1110] font-bold">
-              A
-            </div>
-            <span className="font-heading text-white/90 group-hover:text-white">Æditus</span>
+    <main className="min-h-screen bg-[#0B0C0E] text-white">
+      <header className="sticky top-0 z-40 border-b border-slate-800 bg-[#0B0C0E]/90 backdrop-blur">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+          <a href="/" className="flex items-center gap-2 font-semibold text-white">
+            <span className="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-teal-600 text-white">Æ</span>
+            <span>Æditus</span>
           </a>
-          <div className="hidden items-center gap-6 md:flex">
-            <a href="#about" className="text-sm text-white/70 hover:text-white">
-              Fonctionnalités
-            </a>
-            <a href="#semaine-type" className="text-sm text-white/70 hover:text-white">
-              Comment ça marche
-            </a>
-            <a href="#offres" className="text-sm text-white/70 hover:text-white">
-              Offres
-            </a>
-            <a href="#faq" className="text-sm text-white/70 hover:text-white">
-              FAQ
-            </a>
-            <Link to="/app/client" className="text-sm text-white/70 transition hover:text-white">
-              Plateforme
-            </Link>
-            <Link to="/login" className="text-sm text-white/70 transition hover:text-white">
-              Connexion
-            </Link>
-            <Link to="/register" className="text-sm text-white/70 transition hover:text-white">
-              Inscription
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/login"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5"
-            >
-              Connexion
-            </Link>
-            <Link
-              to="/app/client"
-              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 transition hover:bg-white/5 md:inline-flex"
-            >
-              Voir la plateforme
-            </Link>
+          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-300">
+            {navigation.map((item) => (
+              <a key={item.href} href={item.href} className="hover:text-teal-400">
+                {item.label}
+              </a>
+            ))}
+          </nav>
+          <div className="hidden md:flex items-center gap-3 text-left">
             <a
-              href="#offres"
-              className="hidden rounded-xl border border-white/10 px-4 py-2 text-sm text-white/80 hover:bg-white/5 md:inline-flex"
+              href="/auth/signin"
+              className="group inline-flex flex-col rounded-lg border border-slate-800 px-3 py-2 text-sm hover:border-teal-500 hover:bg-slate-800"
             >
-              Voir les offres
+              <span className="font-medium text-white">Se connecter</span>
+              <span className="text-xs text-slate-400 group-hover:text-teal-300">Auth sécurisée + plateforme clients</span>
             </a>
             <a
-              href="#offres"
-              className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-4 py-2 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60"
+              href="/auth/signup"
+              className="group inline-flex flex-col rounded-lg bg-teal-600 px-3 py-2 text-sm font-semibold text-white hover:bg-teal-700"
             >
-              Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
+              <span>S’inscrire</span>
+              <span className="text-xs font-normal text-teal-100 group-hover:text-white">Essai 7 jours + vérif e-mail incluse</span>
             </a>
           </div>
-        </nav>
+          <div className="md:hidden">
+            <a
+              href="/auth/signup"
+              className="rounded-lg bg-teal-600 px-3 py-2 text-sm font-semibold text-white hover:bg-teal-700"
+            >
+              Essai 7 jours
+            </a>
+          </div>
+        </div>
       </header>
 
-      {/* Hero */}
-      <section id="top" className="relative">
-        {/* hero halo */}
-        <motion.div
-          aria-hidden
-          className="absolute left-1/2 top-6 -z-10 h-64 w-64 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.35),transparent_60%)]"
-          {...haloPulse}
-        />
-        <div className={`${container} grid grid-cols-1 items-center gap-10 py-14 md:grid-cols-2 md:py-20`}>
+      <section className="border-b border-slate-800 bg-[#0B0C0E]">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
           <div>
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
-              <span className={pill}><Sparkles className="h-4 w-4" /> Visibilité – Authenticité</span>
-            </motion.div>
-            <motion.h1 variants={fadeUp} initial="hidden" whileInView="show" custom={1} viewport={{ once: true }} className={`${h1} mt-4`}>
-              Æditus — Plan éditorial mensuel & calendrier de publication
-            </motion.h1>
-            <motion.p variants={fadeUp} initial="hidden" whileInView="show" custom={2} viewport={{ once: true }} className={`${sub} mt-4`}>
-              Plan éditorial complet chaque mois. Publications hebdomadaires sur tous vos réseaux, en 2 clics — gain : +10 h de travail/mois. Vidéos & visuels inclus. Option : tout en automatique (réversible).
-            </motion.p>
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" custom={3} viewport={{ once: true }} className="mt-8 flex flex-wrap items-center gap-3">
-              <Link
-                to="/app/client"
-                className="inline-flex items-center gap-2 rounded-xl border border-white/20 px-5 py-3 text-sm font-semibold text-white/90 shadow-lg shadow-indigo-500/20 transition hover:border-white/40 hover:text-white"
+            <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
+              Plan éditorial complet & contenus prêts à publier
+            </h1>
+            <p className="mt-6 max-w-xl text-lg text-slate-300">
+              Æditus coordonne stratégie, production média et publication multicanale. Vous validez, on déploie.
+              Alfie copilote vos prises de parole et sécurise chaque diffusion.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <a
+                href="/auth/signup"
+                className="rounded-xl bg-teal-600 px-6 py-3 text-base font-semibold text-white transition hover:bg-teal-700"
               >
-                Explorer la plateforme <ChevronRight className="h-4 w-4" />
-              </Link>
-              <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-[#0B1110] shadow-lg shadow-indigo-500/20 hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
-                Démarrer l’essai 7 jours <ChevronRight className="h-4 w-4" />
+                Démarrer l’essai 7 jours
               </a>
-              <a href="#offres" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white/80 hover:bg-white/5">
+              <a
+                href="#pricing"
+                className="rounded-xl border border-slate-700 px-6 py-3 text-base text-white transition hover:bg-slate-800"
+              >
                 Voir les offres
               </a>
-              <a href="#compare" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white/80 hover:bg-white/5">
-                Comparer aux autres solutions
+              <a
+                href="/auth/signin"
+                className="text-sm text-slate-300 underline-offset-4 transition hover:text-teal-400 hover:underline"
+              >
+                Se connecter à la plateforme
               </a>
-            </motion.div>
-            <motion.ul variants={fadeUp} initial="hidden" whileInView="show" custom={4} viewport={{ once: true }} className="mt-5 flex flex-wrap gap-2 text-xs text-white/70">
-              <li className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Plan mensuel</li>
-              <li className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Publication hebdo multi‑réseaux</li>
-              <li className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Authenticité préservée</li>
-              <li className="rounded-full border border-white/10 bg-white/5 px-3 py-1">Zéro ton “IA”</li>
-            </motion.ul>
-
-            {/* Logos réseaux (SVG) */}
-            <motion.div variants={fadeUp} initial="hidden" whileInView="show" custom={5} viewport={{ once: true }} className="mt-6 flex flex-wrap items-center gap-4">
-              <SocialLogos colored animated />
-            </motion.div>
+            </div>
+            <dl className="mt-10 grid grid-cols-2 gap-4 text-sm text-slate-300 sm:max-w-md">
+              <div>
+                <dt className="font-semibold text-white">Publication</dt>
+                <dd>20+ réseaux, blog & newsletter</dd>
+              </div>
+              <div>
+                <dt className="font-semibold text-white">Mode</dt>
+                <dd>Validation 2 clics ou auto réversible</dd>
+              </div>
+            </dl>
           </div>
+          <div className="lg:justify-self-end">
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 shadow-lg">
+              <div className="text-sm text-slate-400">Calendrier en cours</div>
+              <div className="mt-4 grid grid-cols-7 gap-2">
+                {Array.from({ length: 21 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-10 rounded-lg border border-slate-800 bg-slate-800/60"
+                  />
+                ))}
+              </div>
+              <p className="mt-4 text-sm text-slate-400">12 posts programmés · 3 vidéos · 2 articles longs</p>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          {/* Visual / Motion card */}
-          <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className="relative">
-            <div className="relative rounded-2xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-4 shadow-2xl">
-              <motion.div
-                aria-hidden
-                className="absolute -inset-0.5 -z-10 rounded-[1.25rem] bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.35),transparent_45%),radial-gradient(circle_at_70%_80%,rgba(6,182,212,0.25),transparent_55%)]"
-                {...haloPulse}
-              />
-              <div className="rounded-xl border border-white/10 bg-[#0E1514] p-4">
-                <div className="mb-4 flex items-center justify-between">
-                  <span className="text-xs uppercase tracking-wider text-white/60">Aperçu calendrier</span>
-                  <span className="text-xs text-indigo-200">Auto</span>
-                </div>
-                <div className="grid grid-cols-7 gap-2">
-                  {Array.from({ length: 21 }).map((_, i) => (
-                    <motion.div key={i} className="aspect-square rounded-lg bg-white/5" whileHover={{ scale: 1.05 }} />
+      <section id="aeditus" className="border-b border-slate-800 bg-slate-900 py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold text-white">Pourquoi les équipes choisissent Æditus</h2>
+            <p className="mt-4 text-slate-300">
+              Une suite unique pour planifier, produire et publier avec votre voix de marque. Alfie copilote chaque étape
+              et capitalise sur vos meilleures performances.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-8 md:grid-cols-2">
+            {aeditusFeatures.map((feature) => (
+              <div key={feature.title} className="rounded-2xl border border-slate-800 bg-[#0F1115] p-6 shadow-lg">
+                <h3 className="text-xl font-semibold text-white">{feature.title}</h3>
+                <p className="mt-3 text-sm text-slate-300">{feature.description}</p>
+                <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                  {feature.points.map((point) => (
+                    <li key={point} className="flex items-start gap-2">
+                      <span className="mt-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-teal-600 text-[10px]">✓</span>
+                      <span>{point}</span>
+                    </li>
                   ))}
-                </div>
-                <div className="mt-4 rounded-lg bg-white/5 p-3">
-                  <div className="flex items-center gap-2 text-sm text-white/80">
-                    <BadgeCheck className="h-4 w-4 text-indigo-300" /> 12 posts programmés • 2 vidéos • 1 article
-                  </div>
-                </div>
-              </div>
-              <div className="absolute -right-4 -bottom-4 w-48 rotate-3 rounded-xl border border-indigo-300/30 bg-indigo-400/10 p-3 shadow-xl">
-                <div className="flex items-center gap-2 text-sm font-medium text-indigo-100">
-                  <ShieldCheck className="h-4 w-4" /> Votre voix, votre personnalité
-                </div>
-                <p className="mt-1 text-xs text-indigo-100/80">Style appris et respecté partout.</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Badges */}
-      <section aria-label="badges" className="border-y border-white/5 bg-white/5">
-        <div className={`${container} flex flex-wrap items-center justify-center gap-6 py-6 text-white/60`}>
-          <div className="inline-flex items-center gap-2 text-xs"><ShieldCheck className="h-4 w-4 text-indigo-300"/> C2PA/filigrane IA (option)</div>
-          <div className="inline-flex items-center gap-2 text-xs"><ArrowRightLeft className="h-4 w-4 text-indigo-300"/> Anti‑répétition & couverture thématique</div>
-          <div className="inline-flex items-center gap-2 text-xs"><MousePointerClick className="h-4 w-4 text-indigo-300"/> Validation ultra‑light</div>
-        </div>
-      </section>
-
-      {/* Ce que fait Æditus */}
-      <section id="about" className="border-b border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Ce que fait Æditus</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Un <strong>plan éditorial complet chaque mois</strong> + <strong>publication hebdomadaire</strong> sur vos réseaux, avec votre voix de marque.
-            Validation en 2 clics ou <strong>mode automatique</strong> (réversible). Visuels, vidéos et déclinaisons inclus, SEO prêt pour les AI Overviews.
-          </p>
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Plan éditorial</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>Priorités mensuelles, angles, calendrier lisible</li>
-                <li>Garde‑fous de ton : <em>votre voix, votre personnalité</em></li>
-                <li>Objectifs & KPI réalistes</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Publication hebdo</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>Multi‑réseaux, timing optimisé</li>
-                <li>Vidéos courtes & visuels inclus</li>
-                <li>Calendrier drag‑and‑drop ou auto</li>
-              </ul>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-              <h3 className="font-heading text-white">Validation simple</h3>
-              <ul className="mt-2 list-disc pl-5 text-sm text-white/80 space-y-1">
-                <li>2 clics : OK / Éditer / Remplacer</li>
-                <li>Journal de publication transparent</li>
-                <li>Réglages rapides en cours de mois</li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Ce que vous gagnez */}
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
-            {[
-              {t:"+10 h/mois récupérées", d:"moins d’allers‑retours, plus d’exécution"},
-              {t:"Visibilité mesurable", d:"journal de publication & KPI lisibles"},
-              {t:"Cohérence de marque", d:"même voix, partout, chaque semaine"},
-              {t:"Simplicité", d:"validation 2 clics ou mode auto réversible"}
-            ].map((b,i)=> (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-5">
-                <h4 className="font-heading text-white">{b.t}</h4>
-                <p className="mt-1 text-sm text-white/70">{b.d}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Parcours utilisateur */}
-      <section id="semaine-type" className="border-b border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Parcours utilisateur</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            De l’onboarding au suivi des KPI, tout est pensé pour que vous validiez ou remplaciez un contenu en moins de deux clics,
-            tout en gardant la main sur la roadmap produit.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {journeySteps.map((step, index) => {
-              const Icon = step.icon;
-              return (
-                <motion.div
-                  key={step.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6"
-                >
-                  <span className="inline-flex items-center rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-wide text-white/70">
-                    {step.tag}
-                  </span>
-                  <div className="mt-4 flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <h3 className="font-heading text-lg text-white">{step.title}</h3>
-                  </div>
-                  <p className="mt-3 text-sm text-white/70">{step.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Fonctionnalités principales */}
-      <section id="features" className="border-b border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Fonctionnalités principales</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Une plateforme SaaS éditoriale complète qui génère, planifie, publie, mesure et améliore en continu.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {featureBlocks.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  key={feature.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-lg text-white">{feature.title}</h3>
-                      <p className="text-sm text-white/70">{feature.description}</p>
-                    </div>
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm text-white/80">
-                    {feature.bullets.map((bullet, bulletIndex) => (
-                      <li key={bulletIndex} className="inline-flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Offres */}
-      <section id="offres">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Offres & besoins</motion.h2>
-          <motion.p variants={fadeUp} initial="hidden" whileInView="show" custom={1} viewport={{ once: true }} className={`${sub} mt-2 max-w-2xl`}>
-            Règles claires : 1 marque/abo · annulation à tout moment · essai 7 jours pour Starter & Pro.
-          </motion.p>
-
-          {/* Toggle mensuel/annuel */}
-          <div className="mt-6 flex items-center justify-center">
-            <div className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 p-1" data-testid="billing-toggle">
-              {(["mensuel", "annuel"] as const).map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => setBilling(opt)}
-                  className={`px-3 py-1 text-sm rounded-lg ${billing === opt ? "bg-indigo-500 text-[#0B1110]" : "text-white/80 hover:text-white"}`}
-                >
-                  {opt === "mensuel" ? "Mensuel" : "Annuel"}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3" data-testid="pricing-grid">
-            <PriceCard
-              dataTestId="price-essential"
-              badge="Besoin : exister sans se disperser"
-              title="Essential"
-              price={billing === "mensuel" ? euro(prices.essential.monthly) : euro(prices.essential.annual)}
-              period={billing === "mensuel" ? "/mois" : "/an"}
-              discountNote={billing === "annuel" ? "–10% vs mensuel" : undefined}
-              points={[
-                "1 réseau social au choix (12 posts/mois)",
-                "1 visuel ou vidéo / semaine",
-                "Bibliothèque tonale + briefs illimités",
-                "KPI Lite (impressions + abonnés)",
-                "Affiliation 10% (15% après 20 clients)",
-                "Option : articles & Fynk activables"
-              ]}
-              cta="Choisir Essential"
-              ctaLink="/app/client"
-              highlight={false}
-            />
-            <PriceCard
-              dataTestId="price-starter"
-              badge="–25% le 1er mois"
-              title="Starter"
-              price={billing === "mensuel" ? euro(calc.discountedFirstMonth(prices.starter.monthly)) : euro(prices.starter.annual)}
-              period={billing === "mensuel" ? "/mois" : "/an"}
-              strike={billing === "mensuel" ? euro(prices.starter.monthly) : undefined}
-              discountNote={billing === "mensuel" ? "puis 179€/mois" : "–10% vs mensuel"}
-              points={[
-                "Plan éditorial complet (4 réseaux)",
-                "1 vidéo HÉRO + 10 courts/mois",
-                "2 articles SEO 1 200–1 500 mots",
-                "Carrousels + stories + visuels dédiés",
-                "KPI complet + Alfie Copilot",
-                "Essai 7 jours (sans publication)"
-              ]}
-              cta="Choisir Starter"
-              ctaLink="/app/client"
-              highlight={false}
-            />
-            <PriceCard
-              dataTestId="price-pro"
-              badge="–25% le 1er mois"
-              title="Pro"
-              price={billing === "mensuel" ? euro(calc.discountedFirstMonth(prices.pro.monthly)) : euro(prices.pro.annual)}
-              period={billing === "mensuel" ? "/mois" : "/an"}
-              strike={billing === "mensuel" ? euro(prices.pro.monthly) : undefined}
-              discountNote={billing === "mensuel" ? "puis 399€/mois" : "–10% vs mensuel"}
-              points={[
-                "Présence totale : jusqu’à 7 réseaux",
-                "3–4 vidéos HÉRO + courts illimités",
-                "4 articles SEO 1 500–2 000 mots",
-                "Bilans hebdo + recalibrage automatique",
-                "Accès prioritaire aux nouveautés",
-                "Essai 7 jours (sans publication)"
-              ]}
-              cta="Choisir Pro"
-              ctaLink="/app/admin"
-              highlight
-            />
-          </div>
-          <div className="mt-2 text-center text-xs text-white/60">Affiliation : 10 % (15 % après 20 clients) sur toutes les offres et sur Fynk.</div>
-
-          {/* Add-ons moved below (Fynk section) */}
-        </div>
-      </section>
-
-      {/* Fynk Focus */}
-      <section id="fynk" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>
-            Encore plus de visibilité avec Fynk
-          </motion.h2>
-          <p className={`${sub} mt-2 max-w-2xl`}>
-            Add-on d’engagement social : likes, follows et commentaires validés pour amplifier vos contenus. Suggestions prêtes à l’emploi,
-            <strong> validation en 1 clic</strong> et respect strict des règles plateformes.
-          </p>
-
-          {/* Stats */}
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              {k:"+30–60%", v:"de portée sur les 4 premières semaines*"},
-              {k:"< 2 min/jour", v:"grâce aux suggestions prêtes à poster"},
-              {k:"0 spam", v:"respect des règles & de votre image"}
-            ].map((s,i)=> (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center">
-                <div className="font-heading text-2xl text-white">{s.k}</div>
-                <div className="mt-1 text-sm text-white/70">{s.v}</div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-2 text-[10px] text-white/40">*Indication issue de comptes pilotes : dépend de la base d’abonnés et de la fréquence de publication.</div>
-
-          {/* How it works */}
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {[
-              {t:"Connecter", d:"IG/FB/LinkedIn selon l’offre"},
-              {t:"Choisir des routines", d:"thèmes, audiences, cadences"},
-              {t:"Valider en 1 clic", d:"réponses/commentaires pertinents, jamais génériques"}
-            ].map((b,i)=> (
-              <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-6">
-                <h3 className="font-heading text-white">{`0${i+1}`} — {b.t}</h3>
-                <p className="mt-2 text-sm text-white/70">{b.d}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Offres Fynk (déplacées ici) */}
-          <div id="fynk-offres" className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            <AddOnCard
-              title="Fynk Basic — 29€ /mois"
-              price="IG + Facebook"
-              variant="basic"
-              points={[
-                "Jusqu’à 400 interactions qualifiées/mois",
-                "Likes, follows & commentaires validés",
-                "Suggestions quotidiennes avec planning",
-                "Validation en 1 clic, respect des règles"
-              ]}
-              note="1 marque/abo · annulation à tout moment"
-              cta="Choisir Fynk Basic"
-              ctaLink="/app/sandbox"
-            />
-            <AddOnCard
-              title="Fynk Pro — 69€ /mois"
-              price="IG + Facebook + LinkedIn"
-              variant="pro"
-              points={[
-                "Jusqu’à 1 500 interactions qualifiées/mois",
-                "Détection de leads & relances priorisées",
-                "Routines avancées (prospection douce)",
-                "Reporting d’impact & exports"
-              ]}
-              note="1 marque/abo · annulation à tout moment"
-              cta="Choisir Fynk Pro"
-              ctaLink="/app/admin"
-            />
-          </div>
-
-          {/* Ambassadeurs (déplacé ici) */}
-          <div className="hidden mt-8 rounded-2xl border border-indigo-400/20 bg-indigo-400/10 p-6">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <div className={pill}>Programme Ambassadeurs — sous conditions</div>
-                <h3 className="mt-2 font-heading text-xl text-white">Ambassadeurs — 49,90€/mois pendant 3 mois</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm text-white/80">
-                  <li>Actif sur au moins 2 réseaux, sélection sur dossier</li>
-                  <li><strong>4 posts/semaine automatiques</strong> inclus dans votre plan éditorial</li>
-                  <li>Avis/témoignage + feedback mensuel</li>
-                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
                 </ul>
               </div>
-              <Link
-                to="/app/roadmap"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60"
-              >
-                Devenir Ambassadeur <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Plateforme admin */}
-      <section id="admin" className="border-t border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Plateforme admin</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Supervisez vos intégrations, quotas et clients avec une vue unifiée, du sandbox à la roadmap interne.
+      <section id="gains" className="border-b border-slate-800 bg-[#0B0C0E] py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-white">Ce que gagnent nos clients</h2>
+          <p className="mt-4 max-w-2xl text-slate-300">
+            Les entreprises qui activent Æditus constatent rapidement un gain de temps, de visibilité et de conversations
+            qualifiées. Les chiffres ci-dessous proviennent de cohortes suivies sur 90 jours.
           </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {adminModules.map((module, index) => {
-              const Icon = module.icon;
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {gains.map((gain) => (
+              <div key={gain.stat} className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-center">
+                <div className="text-3xl font-bold text-teal-400">{gain.stat}</div>
+                <div className="mt-2 text-base font-semibold text-white">{gain.label}</div>
+                <p className="mt-2 text-sm text-slate-300">{gain.detail}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" className="border-b border-slate-800 bg-slate-900 py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center gap-4 text-center md:flex-row md:justify-between md:text-left">
+            <div>
+              <h2 className="text-3xl font-bold text-white">Nos offres Æditus</h2>
+              <p className="mt-2 text-slate-300">
+                Essai gratuit 7 jours. Annulation 1 clic. Facturation mensuelle ou annuelle avec –10 %.
+              </p>
+            </div>
+            <div className="inline-flex items-center gap-3 rounded-full border border-slate-700 bg-[#0B0C0E] px-3 py-1 text-sm text-slate-300">
+              <span className={!annual ? "font-semibold text-white" : ""}>Mensuel</span>
+              <button
+                type="button"
+                onClick={() => setAnnual((value) => !value)}
+                className="relative h-6 w-11 rounded-full bg-slate-700 transition"
+                aria-pressed={annual}
+                aria-label="Basculer la tarification"
+              >
+                <span
+                  className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition ${annual ? "left-6" : "left-0.5"}`}
+                />
+              </button>
+              <span className={annual ? "font-semibold text-white" : ""}>Annuel –10%</span>
+            </div>
+          </div>
+          <p className="mt-4 text-center text-sm text-slate-400 md:text-left">
+            {annual ? "Affichage équivalent mensuel –10 % + total annuel indiqué." : "Payer à la fin de l’essai si satisfait."}
+          </p>
+
+          <div className="mt-12 grid gap-8 md:grid-cols-3">
+            {plans.map((plan) => {
+              const displayed = price(plan.monthly, annual);
+              const yearly = yearlyTotal(plan.monthly);
+
               return (
-                <motion.div
-                  key={module.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
+                <div
+                  key={plan.name}
+                  className="flex flex-col justify-between rounded-2xl border border-slate-800 bg-[#0F1115] p-6 shadow-lg"
+                  data-testid={plan.name === "Pro" ? "price-pro" : undefined}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-cyan-500/20 text-cyan-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <div>
-                      <h3 className="font-heading text-lg text-white">{module.title}</h3>
-                      <p className="text-sm text-white/70">{module.description}</p>
+                  <div>
+                    <div className="flex items-baseline justify-between">
+                      <h3 className="text-xl font-semibold text-white">{plan.name}</h3>
+                      <div className="text-2xl font-bold text-teal-400">
+                        {displayed}
+                        <span className="text-sm font-normal text-slate-400">€/mois</span>
+                      </div>
                     </div>
+                    {!annual && plan.badge ? (
+                      <div className="mt-1 text-xs text-teal-400">{plan.badge}</div>
+                    ) : null}
+                    {annual ? (
+                      <div className="mt-1 text-xs text-slate-400">{yearly}€ par an · –10% vs mensuel</div>
+                    ) : null}
+                    <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                      {plan.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-2">
+                          <span className="mt-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-teal-600 text-[10px]">✓</span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <ul className="mt-4 space-y-2 text-sm text-white/80">
-                    {module.bullets.map((bullet, bulletIndex) => (
-                      <li key={bulletIndex} className="inline-flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
+                  <a
+                    href="/auth/checkout"
+                    className="mt-6 inline-flex items-center justify-center rounded-xl bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700"
+                  >
+                    Choisir {plan.name}
+                  </a>
+                </div>
               );
             })}
           </div>
         </div>
       </section>
 
-      {/* Ambassadeurs */}
-      <section id="ambassadeurs" className="border-t border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Programme Ambassadeurs</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>Devenez l’une des premières marques à installer une présence régulière avec Æditus. En échange de retours concrets, vous profitez d’un tarif préférentiel et d’un accompagnement rapproché — idéal pour poser des bases solides et accélérer la visibilité sans vous trahir.</p>
-          <div className="mt-6 rounded-2xl border border-indigo-400/20 bg-indigo-400/10 p-6">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <div className={pill}>Ambassadeurs — sous conditions</div>
-                <h3 className="mt-2 font-heading text-xl text-white">49,90€/mois pendant 3 mois</h3>
-                <ul className="mt-2 list-disc pl-5 text-sm text-white/80">
-                  <li>Actif sur au moins 2 réseaux, sélection sur dossier</li>
-                  <li><strong>4 posts/semaine automatiques</strong> inclus dans votre plan éditorial</li>
-                  <li>Avis/témoignage + feedback mensuel</li>
-                  <li>Affiliation activée : 10 % par parrainage, <strong>15 % à partir de 20 clients</strong></li>
+      <section id="fynk" className="border-b border-slate-800 bg-[#0B0C0E] py-20">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold text-white">Boostez votre portée avec Fynk</h2>
+            <p className="mt-4 text-slate-300">
+              Add-on d’engagement social : likes, follows et commentaires validés en un clic. Suggestion humaine + IA,
+              respect strict des règles plateformes.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-8 md:grid-cols-2">
+            {fynkAddons.map((addon) => (
+              <div key={addon.name} className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+                <h3 className="text-lg font-semibold text-white">{addon.name} — {addon.price}</h3>
+                <ul className="mt-4 space-y-2 text-sm text-slate-300">
+                  {addon.bullets.map((bullet) => (
+                    <li key={bullet} className="flex items-start gap-2">
+                      <span className="mt-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-teal-600 text-[10px]">✓</span>
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <Link
-                to="/app/roadmap"
-                className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-white/90 focus:outline-none focus:ring-2 focus:ring-white/60"
-              >
-                Devenir Ambassadeur <ChevronRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Compare */}
-      <section id="compare" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Æditus vs concurrents</motion.h2>
-        	<p className={`${sub} mt-2 max-w-3xl`}>Pas qu’un scheduler : une chaîne complète de génération + orchestration + publication, avec voix de marque conservée.</p>
-
-          <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10">
-            <table className="w-full min-w-[1080px] border-collapse text-sm" data-testid="compare-table">
-              <thead className="bg-white/5">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Fonction</th>
-                  <th className="px-4 py-3 text-left font-medium text-white">Æditus</th>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Hootsuite</th>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Buffer</th>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Metricool</th>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Freelance</th>
-                  <th className="px-4 py-3 text-left font-medium text-white/70">Agence</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ["Génération d’articles SEO + déclinaisons", "Oui", "Non", "Non", "Partiel", "Oui (manuel)", "Oui (coût élevé)"],
-                  ["Mémoire tonale (voix/personnalité)", "Oui", "Non", "Non", "Non", "Variable", "Variable"],
-                  ["Publication multi‑plateforme auto", "Oui", "Oui", "Oui", "Oui", "Non", "Oui (manuel)"],
-                  ["Vidéo intégrée (shorts/covers)", "Oui", "Partiel", "Partiel", "Partiel", "Option", "Option"],
-                  ["A/B hooks + recalibrage KPI", "Oui", "Partiel", "Partiel", "Partiel", "Rare", "Option premium"],
-                  ["Validation ultra‑light in‑app", "Oui", "Partiel", "Partiel", "Partiel", "—", "—"],
-                  ["Affiliation intégrée", "Oui", "Non", "Non", "Non", "—", "—"]
-                ].map((row, i) => (
-                  <tr key={i} className={i % 2 ? "bg-white/0" : "bg-white/5"}>
-                    {row.map((cell, j) => (
-                      <td key={j} className={j === 0 ? "px-4 py-3 text-white/80" : j === 1 ? "px-4 py-3 text-indigo-200" : "px-4 py-3 text-white/60"}>
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Stack & données */}
-      <section id="stack" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Stack & données</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Une architecture moderne prête pour l’automatisation et la scalabilité, avec stockage sécurisé des informations sensibles.
-          </p>
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-            {stackOverview.map((stack, index) => {
-              const Icon = stack.icon;
-              return (
-                <motion.div
-                  key={stack.title}
-                  variants={fadeUp}
-                  initial="hidden"
-                  whileInView="show"
-                  viewport={{ once: true }}
-                  custom={index}
-                  className="rounded-2xl border border-white/10 bg-white/5 p-6"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-500/20 text-indigo-200">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <h3 className="font-heading text-lg text-white">{stack.title}</h3>
-                  </div>
-                  <ul className="mt-4 space-y-2 text-sm text-white/80">
-                    {stack.items.map((item, itemIndex) => (
-                      <li key={itemIndex} className="inline-flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {item}
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Roadmap 7 jours */}
-      <section id="roadmap" className="border-t border-white/5">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Roadmap 7 jours</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Lancement prioritaire sur les fondamentaux : authentification, génération, publication et boucle de feedback.
-          </p>
-          <div className="mt-8 overflow-x-auto rounded-2xl border border-white/10 bg-white/5">
-            <table className="w-full min-w-[720px] border-collapse text-sm">
-              <thead className="bg-white/5 text-left text-white/70">
-                <tr>
-                  <th className="px-4 py-3 font-medium">Jour</th>
-                  <th className="px-4 py-3 font-medium">Focus</th>
-                  <th className="px-4 py-3 font-medium">Détails</th>
-                </tr>
-              </thead>
-              <tbody>
-                {weekRoadmap.map((item, index) => (
-                  <tr key={item.day} className={index % 2 ? "bg-white/0" : "bg-white/5"}>
-                    <td className="px-4 py-3 text-white/80">{item.day}</td>
-                    <td className="px-4 py-3 text-white">{item.focus}</td>
-                    <td className="px-4 py-3 text-white/70">{item.details}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* Exigences non-fonctionnelles */}
-      <section id="non-functional" className="border-t border-white/5 bg-[#0E1514]">
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>Exigences non-fonctionnelles</motion.h2>
-          <p className={`${sub} mt-2 max-w-3xl`}>
-            Fiabilité, performance et conformité dès le premier jour grâce à un cadre de test complet.
-          </p>
-          <ul className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-2">
-            {nonFunctional.map((item, index) => (
-              <motion.li
-                key={item}
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true }}
-                custom={index}
-                className="inline-flex items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-5 text-sm text-white/80"
-              >
-                <ShieldCheck className="mt-0.5 h-5 w-5 text-indigo-300" />
-                <span>{item}</span>
-              </motion.li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq">
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-          <div className="mb-8 rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-400/10 to-cyan-400/10 p-6 text-center">
-            <h3 className="font-heading text-xl text-white">Prêt à installer votre présence régulière ?</h3>
-            <p className="mt-1 text-sm text-white/70">Démarrez l’essai 7 jours (sans publication) ou choisissez une offre.</p>
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
-              <a href="#offres" className="inline-flex items-center gap-2 rounded-xl bg-indigo-500 px-5 py-3 text-sm font-semibold text-[#0B1110] hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/60">
-                Voir les offres <ChevronRight className="h-4 w-4" />
-              </a>
-              <a href="#fynk" className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-5 py-3 text-sm font-semibold text-white/80 hover:bg-white/5">
-                En savoir plus sur Fynk
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className={`${container} py-16 md:py-20`}>
-          <motion.h2 variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }} className={h2}>FAQ</motion.h2>
-          <div className="mt-8 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/5">
-            {[
-              { q: "Puis‑je valider avant publication ?", a: "Oui. Validation ultra‑light (OK / Éditer / Remplacer). Aucune publication surprise." },
-              { q: "Quelles plateformes sont supportées ?", a: "Publication sur 20+ réseaux (selon forfait)." },
-              { q: "Et ma voix de marque ?", a: "Votre voix et votre personnalité sont apprises et respectées dans chaque contenu." },
-              { q: "Fynk, à quoi ça sert ?", a: "Fynk déclenche des interactions utiles (likes/commentaires ciblés) pour augmenter la portée de vos posts et générer des conversations. Résultat : plus de vues, plus de réponses et davantage de RDV/Leads." }
-            ].map((f, i) => (
-              <details key={i} className="group open:bg-white/5">
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-6 px-6 py-5 text-left font-medium text-white/90">
-                  <span>{f.q}</span>
-                  <ChevronRight className="h-5 w-5 shrink-0 text-white/40 transition-transform group-open:rotate-90" />
-                </summary>
-                <div className="px-6 pb-6 text-white/70">{f.a}</div>
-              </details>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t border-white/5">
-        <div className={`${container} flex flex-col items-center justify-between gap-4 py-8 md:flex-row`}>
-          <p className="text-xs text-white/50">© {new Date().getFullYear()} Æditus — Visibilité & Authenticité</p>
-          <div className="flex items-center gap-6 text-xs text-white/50">
-            <a href="#offres" className="hover:text-white/80">Voir les offres</a>
-            <a href="#compare" className="hover:text-white/80">Comparatif</a>
-            <a href="#faq" className="hover:text-white/80">FAQ</a>
+      <footer className="bg-[#0B0C0E] py-12">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
+          <p>© {new Date().getFullYear()} Æditus. Tous droits réservés.</p>
+          <div className="flex items-center gap-4">
+            <a href="/legal" className="hover:text-teal-400">Mentions légales</a>
+            <a href="/privacy" className="hover:text-teal-400">Confidentialité</a>
+            <a href="/terms" className="hover:text-teal-400">CGU</a>
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
-
-function PriceCard({
-  badge,
-  title,
-  price,
-  period,
-  points,
-  cta,
-  highlight,
-  dataTestId,
-  strike,
-  discountNote,
-  ctaLink = "/app/client"
-}: {
-  badge?: string;
-  title: string;
-  price: string;
-  period: string;
-  points: string[];
-  cta: string;
-  highlight?: boolean;
-  dataTestId?: string;
-  strike?: string;
-  discountNote?: string;
-  ctaLink?: string;
-}) {
-  return (
-    <div data-testid={dataTestId} className={`relative rounded-2xl border ${highlight ? "border-indigo-400/40 bg-indigo-400/10" : "border-white/10 bg-white/5"} p-6`}>
-      {badge && (
-        <div className="absolute -top-3 left-4 rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-wide text-white/80">
-          {badge}
-        </div>
-      )}
-      <h3 className="font-heading text-xl text-white">{title}</h3>
-      <div className="mt-2 flex items-end gap-2 flex-wrap">
-        {strike && <span className="text-sm text-white/50 line-through">{strike}</span>}
-        <span className="text-3xl font-semibold text-white">{price}</span>
-        <span className="text-sm text-white/60">{period}</span>
-      </div>
-      {discountNote && (
-        <div className="mt-1 text-xs text-amber-300">{discountNote}</div>
-      )}
-      <ul className="mt-4 space-y-2 text-sm text-white/80">
-        {points.map((p, i) => (
-          <li key={i} className="inline-flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {p}</li>
-        ))}
-      </ul>
-      <Link
-        to={ctaLink}
-        className={`mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold focus:outline-none focus:ring-2 ${
-          highlight
-            ? "bg-indigo-500 text-[#0B1110] hover:bg-indigo-400 focus:ring-indigo-400/60"
-            : "border border-white/10 text-white/80 hover:bg-white/5 focus:ring-white/40"
-        }`}
-      >
-        {cta} <ChevronRight className="h-4 w-4" />
-      </Link>
-    </div>
-  );
-}
-
-function AddOnCard({
-  title,
-  price,
-  points,
-  note,
-  cta,
-  variant,
-  ctaLink = "/app/sandbox"
-}: {
-  title: string;
-  price: string;
-  points: string[];
-  note?: string;
-  cta?: string;
-  variant?: "basic" | "pro";
-  ctaLink?: string;
-}) {
-  const isPro = variant === 'pro';
-  const frame = isPro ? 'border-cyan-400/40 bg-cyan-400/10' : 'border-indigo-400/40 bg-indigo-400/10';
-  const chip = isPro ? 'bg-cyan-400/20 text-cyan-100 border-cyan-400/30' : 'bg-indigo-400/20 text-indigo-100 border-indigo-400/30';
-  return (
-    <div className={`rounded-2xl border ${frame} p-6`}>
-      <div className="flex items-baseline justify-between">
-        <h3 className="font-heading text-lg text-white">{title}</h3>
-        <div className="text-sm text-white/70">{price}</div>
-      </div>
-      <span className={`mt-2 inline-flex rounded-full border px-2 py-0.5 text-[10px] ${chip}`}>{isPro ? 'Pro' : 'Basic'}</span>
-      <ul className="mt-3 space-y-2 text-sm text-white/80">
-        {points.map((p, i) => (
-          <li key={i} className="inline-flex items-start gap-2"><Check className="mt-0.5 h-4 w-4 text-indigo-300" /> {p}</li>
-        ))}
-      </ul>
-      {note && <p className="mt-3 text-xs text-white/50">{note}</p>}
-      {cta && (
-        <Link
-          to={ctaLink}
-          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white/80 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-white/40"
-        >
-          {cta} <ChevronRight className="h-4 w-4" />
-        </Link>
-      )}
-    </div>
-  );
-}
-
-// Social logos (colored + subtle animation)
-function SocialLogos({ colored = false, animated = false }: { colored?: boolean; animated?: boolean }){
-  const base = "h-7 w-7 transition-transform";
-  const hover = animated ? "hover:scale-110" : "";
-  return (
-    <div className="flex flex-wrap items-center gap-4">
-      {/* LinkedIn */}
-      <svg aria-label="LinkedIn" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="4" fill={colored ? "#0A66C2" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <rect x="5" y="9" width="3" height="10" fill="#ffffff"/>
-        <circle cx="6.5" cy="6.5" r="1.5" fill="#ffffff"/>
-        <path d="M11 9h3v1.5c.6-1 1.6-1.7 3-1.7 2.2 0 3 1.3 3 3.5V19h-3v-5c0-1.2-.4-2-1.5-2-1 0-1.5.8-1.5 2V19h-3V9z" fill="#ffffff"/>
-      </svg>
-      {/* Instagram */}
-      <svg aria-label="Instagram" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <defs>
-          <radialGradient id="igG" cx="50%" cy="50%" r="75%">
-            <stop offset="0%" stopColor="#FFDC80"/>
-            <stop offset="50%" stopColor="#F56040"/>
-            <stop offset="100%" stopColor="#833AB4"/>
-          </radialGradient>
-        </defs>
-        <rect x="3" y="3" width="18" height="18" rx="5" fill={colored ? "url(#igG)" : "none"} stroke={colored ? "none" : "currentColor"}/>
-        <circle cx="12" cy="12" r="3.5" stroke={colored ? "#fff" : "currentColor"} fill="none"/>
-        <circle cx="17.5" cy="6.5" r="1" fill={colored ? "#fff" : "currentColor"}/>
-      </svg>
-      {/* TikTok */}
-      <svg aria-label="TikTok" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="4" fill={colored ? "#000" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <path d="M14 4v6.5c-1-.7-2.1-1.1-3.3-1.1A4.7 4.7 0 0 0 6 14c0 2.6 2.1 4.7 4.7 4.7 2.3 0 4.2-1.7 4.6-3.9V8.2c1 .8 2.2 1.3 3.7 1.4V7.3c-1.5-.1-2.7-.7-3.7-1.7C14.6 4.9 14.2 4.5 14 4z" fill={colored ? "#69C9D0" : "currentColor"}/>
-        <path d="M14 4c.6.7 1.3 1.3 2.1 1.8 1 .7 2.1 1.1 3.3 1.1V7.3c-1.5-.1-2.7-.7-3.7-1.7-.7-.7-1.2-1.2-1.7-1.6z" fill={colored ? "#EE1D52" : "currentColor"} opacity={colored ? 1 : 0.8}/>
-      </svg>
-      {/* YouTube */}
-      <svg aria-label="YouTube" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="3" y="7" width="18" height="10" rx="3" fill={colored ? "#FF0000" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <path d="M10 10l5 2-5 2z" fill="#fff"/>
-      </svg>
-      {/* Facebook */}
-      <svg aria-label="Facebook" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="4" fill={colored ? "#1877F2" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <path d="M13 8h2V5h-2c-2 0-3.5 1.5-3.5 3.5V11H7v3h2.5v5H13v-5h2.2l.3-3H13V9.5c0-.9.4-1.5 1-1.5z" fill="#fff"/>
-      </svg>
-      {/* X */}
-      <svg aria-label="X" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="4" fill={colored ? "#000" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <path d="M5 5l14 14m0-14L5 19" stroke="#fff" strokeWidth="2"/>
-      </svg>
-      {/* Pinterest */}
-      <svg aria-label="Pinterest" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="4" fill={colored ? "#E60023" : "currentColor"} opacity={colored ? 1 : 0.15}/>
-        <path d="M12 6.5c-3 0-5 2-5 4.5 0 1.8 1 3.3 2.8 3.6.2 0 .3 0 .3-.2.1-.2.2-.8.2-.8 0-.2-.1-.3-.2-.5-.5-.6-.8-1.5-.8-2.3 0-2.1 1.6-3.5 3.8-3.5 2 0 3.3 1.2 3.3 3 0 2.2-1.1 3.8-2.5 3.8-.8 0-1.4-.6-1.2-1.4l.4-1.7c.1-.5 0-.7-.3-1-.3-.2-.9 0-1.2.5-.3.6-.5 1.4-.5 2 0 1 .3 1.7 1 2 .7.4 1.7.4 2.5 0 1.6-.8 2.7-2.7 2.7-5 0-3-2.2-5.3-5.5-5.3z" fill="#fff"/>
-      </svg>
-      {/* Threads */}
-      <svg aria-label="Threads" viewBox="0 0 24 24" className={`${base} ${hover}`}>
-        <rect x="2" y="2" width="20" height="20" rx="10" fill={colored ? "#000" : "none"} stroke={colored ? "#000" : "currentColor"}/>
-        <path d="M12 7c3 0 5 1.8 5 5s-2 5-5 5c-2 0-3.5-1.2-3.5-2.6 0-1.3 1-2.2 2.4-2.2 1 0 2 .4 2 .4 0-1.3-.7-2-1.9-2-1 0-1.8.5-2.3 1.2L8 10.7C8.8 9.5 10.2 9 12 9c2.6 0 4.2 1.7 4.2 4.1 0 2.5-1.6 4.1-4 4.1" stroke={colored ? "#fff" : "currentColor"} fill="none"/>
-      </svg>
-    </div>
-  );
-}
-
-/* Tailwind helpers (optional, drop in globals.css)
-:root { --bg:#0B1110; --fg:#F8FAF9; --brand:#6366F1; }
-.font-heading{ font-family: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"; }
-*/
