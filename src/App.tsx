@@ -12,6 +12,19 @@ import LoginPage from "./components/auth/LoginPage";
 import SignupPage from "./components/auth/SignupPage";
 import AppLayout from "./components/app/AppLayout";
 import HomePage from "./components/app/HomePage";
+import PlanPage from "./components/app/PlanPage";
+import CalendarPage from "./components/app/CalendarPage";
+import ContentsListPage from "./components/app/ContentsListPage";
+import ContentDetailPage from "./components/app/ContentDetailPage";
+import ContentCreatePage from "./components/app/ContentCreatePage";
+import ContentImportPage from "./components/app/ContentImportPage";
+import TasksPage from "./components/app/TasksPage";
+import TaskCreatePage from "./components/app/TaskCreatePage";
+import AnalyticsPage from "./components/app/AnalyticsPage";
+import FynkPage from "./components/app/FynkPage";
+import BillingPage from "./components/app/BillingPage";
+import SettingsPage from "./components/app/SettingsPage";
+import HelpPage from "./components/app/HelpPage";
 
 const App = () => (
   <BrowserRouter>
@@ -24,15 +37,19 @@ const App = () => (
           {/* New app structure */}
           <Route path="/app" element={<AppLayout />}>
             <Route index element={<HomePage />} />
-            <Route path="plan" element={<div>Plan éditorial</div>} />
-            <Route path="calendar" element={<div>Calendrier</div>} />
-            <Route path="contents" element={<div>Contenus</div>} />
-            <Route path="tasks" element={<div>Tâches</div>} />
-            <Route path="analytics" element={<div>Analytics</div>} />
-            <Route path="fynk" element={<div>Fynk</div>} />
-            <Route path="billing" element={<div>Facturation</div>} />
-            <Route path="settings" element={<div>Paramètres</div>} />
-            <Route path="help" element={<div>Aide</div>} />
+            <Route path="plan" element={<PlanPage />} />
+            <Route path="calendar" element={<CalendarPage />} />
+            <Route path="contents" element={<ContentsListPage />} />
+            <Route path="contents/new" element={<ContentCreatePage />} />
+            <Route path="contents/import" element={<ContentImportPage />} />
+            <Route path="contents/:id" element={<ContentDetailPage />} />
+            <Route path="tasks" element={<TasksPage />} />
+            <Route path="tasks/new" element={<TaskCreatePage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
+            <Route path="fynk" element={<FynkPage />} />
+            <Route path="billing" element={<BillingPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+            <Route path="help" element={<HelpPage />} />
           </Route>
           {/* Legacy platform routes */}
           <Route path="/platform" element={<PlatformLayout />}>
