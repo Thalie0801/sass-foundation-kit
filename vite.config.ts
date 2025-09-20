@@ -14,8 +14,4 @@ export default defineConfig({
       "framer-motion": fileURLToPath(new URL("./src/compat/framer-motion.tsx", import.meta.url)),
     },
   },
-  test: {
-    environment: "jsdom",
-    setupFiles: "./tests/setup.ts",
-  },
 });
